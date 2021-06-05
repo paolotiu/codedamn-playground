@@ -24,6 +24,7 @@
     "arrow-body-style": "off",
     "no-underscore-dangle": "off",
     "prefer-template": "off",
+    "consistent-return": "off",
     "import/no-extraneous-dependencies": [
       "error",
       { "bundledDependencies": false, "optionalDependencies": false, "peerDependencies": false }

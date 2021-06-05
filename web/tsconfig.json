@@ -21,7 +21,8 @@
     "paths": {
       "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],
-      "@interfaces/*": ["interfaces/*"]
+      "@interfaces/*": ["interfaces/*"],
+      "@styles/*": ["styles/*"]
     }
   },
   "exclude": ["node_modules"],
