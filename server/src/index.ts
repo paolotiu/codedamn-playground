@@ -16,7 +16,9 @@ const startMongoose = async () => {
 const startApolloServer = async () => {
   const app = express();
 
-  // Session middleware
+  // For now we're using the memory to store the sessions
+  // In the future we'll want to use something like Redis to persist users
+  // even if the server restarts
   app.use(
     session({
       secret: process.env.SESSION_SECRET as string,

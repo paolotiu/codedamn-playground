@@ -12,6 +12,11 @@ type FieldError {
   message: String!
 }
 
+type Query {
+  me: User
+}
+
 type Mutation {
   register(email: String!, password: String!): UserResponse!
+  login(email: String!, password: String!): UserResponse!
 }
