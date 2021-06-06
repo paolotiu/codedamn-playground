@@ -1,16 +1,8 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import session from 'express-session';
 import 'dotenv/config';
 import { createApolloServer } from '@utils/createApolloServer';
-
-const startMongoose = async () => {
-  mongoose.connect(process.env.DB_URL as string, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  });
-};
+import { createMongooseConnection } from '@utils/createMongooseConnection';
 
 const startApolloServer = async () => {
   const app = express();
@@ -40,7 +32,7 @@ const startApolloServer = async () => {
 
   server.applyMiddleware({ app });
 
-  await startMongoose();
+  await createMongooseConnection();
   await new Promise<void>((resolve) => app.listen(4000, resolve));
 
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
