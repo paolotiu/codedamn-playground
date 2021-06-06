@@ -24,12 +24,13 @@
     "paths": {
       "@models/*": ["models/*"],
       "@graphql/*": ["graphql/*"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@testUtils/*": ["testUtils/*"]
     },
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*", "jest.globalSetup.ts"],
-  "exclude": ["node_modules", "**/tests"]
+  "exclude": ["node_modules"]
 }

@@ -1,13 +1,11 @@
-import { MutationLoginArgs, MutationRegisterArgs } from '@graphql/types';
+import { MutationLoginArgs } from '@graphql/types';
 import User from '@models/User';
 import { createApolloServer } from '@utils/createApolloServer';
-import { createMongooseConnection } from '@utils/createMongooseConnection';
 import { gql } from 'apollo-server-express';
 import { createTestClient } from 'apollo-server-integration-testing';
-import mongoose from 'mongoose';
 
 const apolloServer = createApolloServer();
-const { query, mutate, setOptions } = createTestClient({ apolloServer });
+const { mutate, setOptions } = createTestClient({ apolloServer });
 
 // Default server options
 setOptions({
@@ -16,13 +14,6 @@ setOptions({
       userId: undefined,
     },
   },
-});
-
-beforeAll(async () => {
-  await createMongooseConnection(global.__MONGO_URI__);
-});
-afterAll(async () => {
-  await mongoose.connection.close();
 });
 
 const REGISTER_MUTATION = gql`
@@ -48,7 +39,7 @@ const LOGIN_MUTATION = gql`
   }
 `;
 
-const loginMutation = (variables: MutationLoginArgs) =>
+export const loginMutation = (variables: MutationLoginArgs) =>
   mutate<{ login: { user: { email: string } | null; errors: any[] } }>(
     LOGIN_MUTATION,
     { variables }
