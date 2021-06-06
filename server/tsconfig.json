@@ -30,6 +30,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "jest.globalSetup.ts"],
   "exclude": ["node_modules", "**/tests"]
 }
