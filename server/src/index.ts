@@ -1,9 +1,8 @@
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-import { schema } from '@graphql/schema';
 import mongoose from 'mongoose';
 import session from 'express-session';
 import 'dotenv/config';
+import { createApolloServer } from '@utils/createApolloServer';
 
 const startMongoose = async () => {
   mongoose.connect(process.env.DB_URL as string, {
@@ -35,15 +34,7 @@ const startApolloServer = async () => {
     })
   );
 
-  const server = new ApolloServer({
-    schema,
-    context: ({ req, res }) => ({ req, res, userId: req.session.userId }),
-    playground: {
-      settings: {
-        'request.credentials': 'include',
-      },
-    },
-  });
+  const server = createApolloServer();
 
   await server.start();
 
