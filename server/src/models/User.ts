@@ -5,7 +5,7 @@ interface IUser {
   email: string;
   password: string;
 }
-interface IUserDoc extends IUser, Document {}
+export interface IUserDoc extends IUser, Document {}
 const UserSchemaFields: InterfaceSchema<IUser> = {
   email: {
     type: String,
