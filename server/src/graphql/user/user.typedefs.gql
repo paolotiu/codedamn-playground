@@ -1,6 +1,7 @@
 type User {
   email: String!
   files: [File]
+  id: ID!
 }
 
 type UserResponse {
