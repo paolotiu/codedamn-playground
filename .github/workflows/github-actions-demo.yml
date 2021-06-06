@@ -9,9 +9,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - name: Install dependencies
+      - name: Install server dependencies
         run: yarn install --frozen-lockfile
         working-directory: ./server
-      - name: Run tests
+      - name: Run server tests
         run: yarn test
         working-directory: ./server
