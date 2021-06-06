@@ -1,4 +1,4 @@
-import { Schema, model, ObjectId, Document } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { InterfaceSchema } from './utilTypes';
 
 export interface IFile {
