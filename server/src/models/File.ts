@@ -1,7 +1,7 @@
-import { Schema, model, ObjectId } from 'mongoose';
+import { Schema, model, ObjectId, Document } from 'mongoose';
+import { InterfaceSchema } from './utilTypes';
 
 export interface IFile {
-  id: ObjectId;
   value: string;
   mimeType: string;
   name: string;
@@ -9,7 +9,7 @@ export interface IFile {
 
 interface IFileDoc extends IFile, Document {}
 
-const FileSchemaFields: Omit<Record<keyof IFile, any>, 'id'> = {
+const FileSchemaFields: InterfaceSchema<IFile> = {
   value: {
     type: String,
     default: '',
@@ -25,6 +25,6 @@ const FileSchemaFields: Omit<Record<keyof IFile, any>, 'id'> = {
   },
 };
 
-const FileSchema = new Schema<IFile>(FileSchemaFields);
+const FileSchema = new Schema<IFileDoc>(FileSchemaFields);
 
 export default model<IFileDoc>('File', FileSchema);
