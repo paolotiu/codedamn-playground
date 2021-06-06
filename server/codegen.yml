@@ -1,9 +1,10 @@
 overwrite: true
-schema: 'src/graphql/schema.ts'
+schema: 'src/graphql/**/*.typedefs.gql'
 documents: null
 generates:
-  src/generated/graphql.ts:
+  src/graphql/types.ts:
     config:
+      contextType: ./contextType#ApolloContext
     plugins:
       - 'typescript'
       - 'typescript-resolvers'
