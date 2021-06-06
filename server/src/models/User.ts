@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, LeanDocument } from 'mongoose';
 import { InterfaceSchema } from './utilTypes';
 
 interface IUser {
@@ -9,6 +9,8 @@ interface IUser {
 export interface IUserDoc extends IUser, Document {
   id: string;
 }
+
+export interface LeanIUserDoc extends LeanDocument<IUserDoc> {}
 
 const UserSchemaFields: InterfaceSchema<IUser> = {
   email: {

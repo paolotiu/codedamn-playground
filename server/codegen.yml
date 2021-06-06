@@ -4,6 +4,8 @@ documents: null
 generates:
   src/graphql/types.ts:
     config:
+      mappers:
+        User: ../models/User#LeanIUserDoc
       contextType: ./contextType#ApolloContext
     plugins:
       - 'typescript'

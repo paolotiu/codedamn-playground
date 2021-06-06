@@ -1,9 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
+import { LeanIUserDoc } from '../models/User';
 import { ApolloContext } from './contextType';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -33,6 +35,7 @@ export type Mutation = {
   createFile: File;
   login: UserResponse;
   register: UserResponse;
+  updateFile?: Maybe<File>;
 };
 
 
@@ -50,6 +53,11 @@ export type MutationLoginArgs = {
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationUpdateFileArgs = {
+  data: UpdateFileInput;
 };
 
 export type Query = {
@@ -70,9 +78,16 @@ export type QueryGetFileByIdArgs = {
   id: Scalars['ID'];
 };
 
+export type UpdateFileInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
+  files?: Maybe<Array<Maybe<File>>>;
 };
 
 export type UserResponse = {
@@ -165,8 +180,9 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
-  User: ResolverTypeWrapper<User>;
-  UserResponse: ResolverTypeWrapper<UserResponse>;
+  UpdateFileInput: UpdateFileInput;
+  User: ResolverTypeWrapper<LeanIUserDoc>;
+  UserResponse: ResolverTypeWrapper<Omit<UserResponse, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
@@ -178,8 +194,9 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'];
   Mutation: {};
   Query: {};
-  User: User;
-  UserResponse: UserResponse;
+  UpdateFileInput: UpdateFileInput;
+  User: LeanIUserDoc;
+  UserResponse: Omit<UserResponse, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   Boolean: Scalars['Boolean'];
 };
 
@@ -201,6 +218,7 @@ export type MutationResolvers<ContextType = ApolloContext, ParentType extends Re
   createFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationCreateFileArgs, 'name'>>;
   login?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password'>>;
+  updateFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUpdateFileArgs, 'data'>>;
 };
 
 export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -212,6 +230,7 @@ export type QueryResolvers<ContextType = ApolloContext, ParentType extends Resol
 
 export type UserResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  files?: Resolver<Maybe<Array<Maybe<ResolversTypes['File']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -1,3 +1,4 @@
+import File from '@models/File';
 import User from '@models/User';
 import bcrypt from 'bcryptjs';
 import { Resolvers } from '../types';
@@ -6,9 +7,16 @@ const invalidLogin = {
   errors: [{ path: 'login', message: 'The email or password is incorrect' }],
 };
 export const userResolvers: Resolvers = {
-  Query: {
-    me: async (_, __, { userId }) => User.findById(userId),
+  User: {
+    files: async (parent) => File.find({ user: parent.id }),
   },
+  Query: {
+    me: async (_, __, { userId }) => {
+      const user = await User.findById(userId).lean();
+      return user;
+    },
+  },
+
   Mutation: {
     register: async (_, { email, password }) => {
       const existingUser = await User.findOne({ email });
