@@ -10,6 +10,7 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/src',
   }),
+  setupFilesAfterEnv: ['<rootDir>/src/testUtils/setup.ts'],
   globals: {
     'ts-jest': {
       isolatedModules: true,
