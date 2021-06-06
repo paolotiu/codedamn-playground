@@ -5,6 +5,7 @@ import { mergeTypeDefs } from '@graphql-tools/merge';
 import { mergeResolvers } from '@graphql-tools/merge';
 import { userResolvers } from './user/user.resolvers';
 import { fileResolvers } from './file/file.resolvers';
+import { sharedResolvers } from './shared/shared.resolvers';
 
 const typeDefsArray = loadFilesSync(
   path.join(__dirname, './**/*.typedefs.gql'),
@@ -16,7 +17,11 @@ const typeDefsArray = loadFilesSync(
 
 // Merge
 const typeDefs = mergeTypeDefs(typeDefsArray);
-const resolvers = mergeResolvers([userResolvers, fileResolvers]);
+const resolvers = mergeResolvers([
+  userResolvers,
+  fileResolvers,
+  sharedResolvers,
+]);
 
 export const schema = makeExecutableSchema({
   typeDefs,
