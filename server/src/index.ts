@@ -37,7 +37,7 @@ const startApolloServer = async () => {
 
   const server = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => ({ req, res, userId: req.session.userId }),
     playground: {
       settings: {
         'request.credentials': 'include',

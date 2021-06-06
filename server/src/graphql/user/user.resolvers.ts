@@ -7,7 +7,7 @@ const invalidLogin = {
 };
 export const userResolvers: Resolvers = {
   Query: {
-    me: async (_, __, { req }) => User.findById(req.session.userId),
+    me: async (_, __, { userId }) => User.findById(userId),
   },
   Mutation: {
     register: async (_, { email, password }) => {
