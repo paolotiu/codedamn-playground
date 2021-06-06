@@ -5,17 +5,26 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "generate": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.1.3",
     "eslint-config-prettier": "^8.2.0",
+    "graphql": "^15.5.0",
+    "graphql-request": "^3.4.0",
     "monaco-editor": "^0.24.0",
     "next": "latest",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-query": "^3.16.1"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "1.21.5",
+    "@graphql-codegen/typescript": "1.22.1",
+    "@graphql-codegen/typescript-operations": "1.18.0",
+    "@graphql-codegen/typescript-react-apollo": "2.2.5",
+    "@graphql-codegen/typescript-react-query": "^1.3.1",
     "@types/node": "^14.14.41",
     "@types/react": "^17.0.3",
     "@types/react-dom": "^17.0.3",
