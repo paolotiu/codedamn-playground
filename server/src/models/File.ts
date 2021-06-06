@@ -9,7 +9,9 @@ export interface IFile {
   user: string | ObjectId | IUserDoc;
 }
 
-interface IFileDoc extends IFile, Document {}
+interface IFileDoc extends IFile, Document {
+  id: string;
+}
 
 const FileSchemaFields: InterfaceSchema<IFile> = {
   value: {
@@ -18,7 +20,6 @@ const FileSchemaFields: InterfaceSchema<IFile> = {
   },
   name: {
     type: String,
-    unique: true,
     required: true,
   },
   mimeType: {
@@ -33,5 +34,8 @@ const FileSchemaFields: InterfaceSchema<IFile> = {
 };
 
 const FileSchema = new Schema<IFileDoc>(FileSchemaFields);
+
+// Create a compound index for name uniqueness per user
+FileSchema.index({ name: 1, user: 1 }, { unique: true });
 
 export default model<IFileDoc>('File', FileSchema);

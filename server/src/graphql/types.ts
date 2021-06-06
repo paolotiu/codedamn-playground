@@ -22,6 +22,7 @@ export type FieldError = {
 
 export type File = {
   __typename?: 'File';
+  id: Scalars['ID'];
   name: Scalars['String'];
   value: Scalars['String'];
   mimeType: Scalars['String'];
@@ -53,8 +54,20 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getFile?: Maybe<File>;
+  getFileById?: Maybe<File>;
   me?: Maybe<User>;
   ping: Scalars['String'];
+};
+
+
+export type QueryGetFileArgs = {
+  name: Scalars['String'];
+};
+
+
+export type QueryGetFileByIdArgs = {
+  id: Scalars['ID'];
 };
 
 export type User = {
@@ -149,6 +162,7 @@ export type ResolversTypes = {
   FieldError: ResolverTypeWrapper<FieldError>;
   String: ResolverTypeWrapper<Scalars['String']>;
   File: ResolverTypeWrapper<File>;
+  ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
@@ -161,6 +175,7 @@ export type ResolversParentTypes = {
   FieldError: FieldError;
   String: Scalars['String'];
   File: File;
+  ID: Scalars['ID'];
   Mutation: {};
   Query: {};
   User: User;
@@ -175,6 +190,7 @@ export type FieldErrorResolvers<ContextType = ApolloContext, ParentType extends 
 };
 
 export type FileResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   mimeType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -188,6 +204,8 @@ export type MutationResolvers<ContextType = ApolloContext, ParentType extends Re
 };
 
 export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileArgs, 'name'>>;
+  getFileById?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileByIdArgs, 'id'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };

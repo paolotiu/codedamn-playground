@@ -1,9 +1,13 @@
 type File {
+  id: ID!
   name: String!
   value: String!
   mimeType: String!
 }
-
+type Query {
+  getFile(name: String!): File
+  getFileById(id: ID!): File
+}
 type Mutation {
   createFile(name: String!): File!
 }
