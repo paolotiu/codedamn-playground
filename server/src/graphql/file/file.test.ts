@@ -14,12 +14,16 @@ import { createApolloServer } from '@utils/createApolloServer';
 import { createTestClient } from 'apollo-server-integration-testing';
 
 const apolloServer = createApolloServer();
-const testClient = createTestClient({
+const { mutate, setOptions } = createTestClient({
   apolloServer,
-  extendMockRequest: { session: { userId: undefined } },
 });
 
-const { mutate, setOptions } = testClient;
+// default client options
+setOptions({
+  request: {
+    session: { userId: undefined },
+  },
+});
 
 const registerMutation = (variables: MutationRegisterArgs) =>
   mutate(REGISTER_MUTATION, { variables });

@@ -7,7 +7,7 @@ import { createTestClient } from 'apollo-server-integration-testing';
 const apolloServer = createApolloServer();
 const { mutate, setOptions } = createTestClient({ apolloServer });
 
-// Default server options
+// Default client options
 setOptions({
   request: {
     session: {
