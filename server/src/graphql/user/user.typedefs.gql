@@ -1,0 +1,17 @@
+type User {
+  email: String!
+}
+
+type UserResponse {
+  user: User
+  errors: [FieldError]
+}
+
+type FieldError {
+  path: String!
+  message: String!
+}
+
+type Mutation {
+  register(email: String!, password: String!): UserResponse!
+}

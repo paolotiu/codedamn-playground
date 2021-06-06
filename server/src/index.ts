@@ -1,8 +1,8 @@
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { typeDefs } from './graphql/schema';
-import { resolvers } from './graphql/resolvers';
+import { schema } from '@graphql/schema';
 import mongoose from 'mongoose';
+import session from 'express-session';
 import 'dotenv/config';
 
 const startMongoose = async () => {
@@ -15,10 +15,34 @@ const startMongoose = async () => {
 
 const startApolloServer = async () => {
   const app = express();
+
+  // Session middleware
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET as string,
+      resave: false,
+      saveUninitialized: false,
+      name: 'sid',
+      cookie: {
+        httpOnly: true,
+
+        // Https only
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+      },
+    })
+  );
+
   const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
+    context: ({ req, res }) => ({ req, res }),
+    playground: {
+      settings: {
+        'request.credentials': 'include',
+      },
+    },
   });
+
   await server.start();
 
   server.applyMiddleware({ app });

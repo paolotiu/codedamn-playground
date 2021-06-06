@@ -1,0 +1,9 @@
+type File {
+  name: String!
+  value: String!
+  mimeType: String!
+}
+
+type Mutation {
+  createFile(name: String!): File!
+}

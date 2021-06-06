@@ -1,18 +1,24 @@
-import { gql } from 'apollo-server-express';
+import path from 'path';
+import { loadFilesSync } from '@graphql-tools/load-files';
+import { makeExecutableSchema } from 'apollo-server-express';
+import { mergeTypeDefs } from '@graphql-tools/merge';
+import { mergeResolvers } from '@graphql-tools/merge';
+import { userResolvers } from './user/user.resolvers';
+import { fileResolvers } from './file/file.resolvers';
 
-export const typeDefs = gql`
-  type File {
-    name: String!
-    value: String!
-    mimeType: String!
+const typeDefsArray = loadFilesSync(
+  path.join(__dirname, './**/*.typedefs.gql'),
+  {
+    extensions: ['gql'],
+    recursive: true,
   }
+);
 
-  type Query {
-    ping: String!
-  }
+// Merge
+const typeDefs = mergeTypeDefs(typeDefsArray);
+const resolvers = mergeResolvers([userResolvers, fileResolvers]);
 
-  type Mutation {
-    test: String
-    createFile(name: String!): File!
-  }
-`;
+export const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
