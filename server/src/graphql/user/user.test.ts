@@ -1,7 +1,7 @@
 import { MutationLoginArgs } from '@graphql/types';
 import User from '@models/User';
+import { LOGIN_MUTATION, REGISTER_MUTATION } from '@testUtils/user.operations';
 import { createApolloServer } from '@utils/createApolloServer';
-import { gql } from 'apollo-server-express';
 import { createTestClient } from 'apollo-server-integration-testing';
 
 const apolloServer = createApolloServer();
@@ -16,30 +16,7 @@ setOptions({
   },
 });
 
-const REGISTER_MUTATION = gql`
-  mutation registerUser($email: String!, $password: String!) {
-    register(email: $email, password: $password) {
-      user {
-        email
-      }
-    }
-  }
-`;
-
-const LOGIN_MUTATION = gql`
-  mutation loginUser($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      user {
-        email
-      }
-      errors {
-        message
-      }
-    }
-  }
-`;
-
-export const loginMutation = (variables: MutationLoginArgs) =>
+const loginMutation = (variables: MutationLoginArgs) =>
   mutate<{ login: { user: { email: string } | null; errors: any[] } }>(
     LOGIN_MUTATION,
     { variables }
@@ -47,7 +24,7 @@ export const loginMutation = (variables: MutationLoginArgs) =>
 
 describe('Auth flow', () => {
   const mockUser = { email: 'test@test.com', password: 'testPassword' };
-  test('register', async () => {
+  it('Registers user', async () => {
     await mutate(REGISTER_MUTATION, {
       variables: mockUser,
     });
@@ -61,7 +38,7 @@ describe('Auth flow', () => {
     expect(user?.password).not.toEqual(mockUser.password);
   });
 
-  test('Rejects invalid login', async () => {
+  it('Rejects invalid login', async () => {
     const { data } = await loginMutation({
       email: mockUser.email,
       password: 'notThePassword',
@@ -71,7 +48,7 @@ describe('Auth flow', () => {
     expect(data?.login.user).toBeNull();
   });
 
-  test('Accepts valid login', async () => {
+  it('Accepts valid login', async () => {
     const { data } = await loginMutation(mockUser);
 
     // Confirmed returns user
