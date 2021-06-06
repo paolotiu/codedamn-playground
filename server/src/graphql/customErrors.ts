@@ -10,3 +10,16 @@ export class AuthError extends ApolloError {
     Object.defineProperty(this, 'name', { value: 'AuthError' });
   }
 }
+
+interface NotFoundArgs {
+  message?: string;
+  item?: string;
+}
+export class NotFoundByIdError extends ApolloError {
+  constructor({ message, item }: NotFoundArgs) {
+    // Have a default auth error message
+    super(message || `No ${item} with that id found`, 'NOT_FOUND_ERROR');
+
+    Object.defineProperty(this, 'name', { value: 'NotFoundError' });
+  }
+}

@@ -4,10 +4,19 @@ type File {
   value: String!
   mimeType: String!
 }
+
+input UpdateFileInput {
+  id: ID!
+  name: String
+  value: String
+}
+
 type Query {
   getFile(name: String!): File
   getFileById(id: ID!): File
 }
 type Mutation {
   createFile(name: String!): File!
+
+  updateFile(data: UpdateFileInput!): File
 }

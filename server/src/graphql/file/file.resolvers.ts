@@ -1,4 +1,4 @@
-import { AuthError } from '@graphql/customErrors';
+import { AuthError, NotFoundByIdError } from '@graphql/customErrors';
 import File from '@models/File';
 import mime from 'mime-types';
 import { Resolvers } from '../types';
@@ -24,6 +24,24 @@ export const fileResolvers: Resolvers = {
         mimeType,
         user: userId,
       });
+
+      return file.save();
+    },
+    updateFile: async (_, { data: { id, name, value } }, { userId }) => {
+      if (!userId) throw new AuthError();
+      const file = await File.findOne({ _id: id, user: userId });
+      if (!file) throw new NotFoundByIdError({ item: 'file' });
+      if (name) {
+        file.name = name;
+
+        // Generate new mimeType if extension changes;
+        file.mimeType = String(mime.lookup(name));
+      }
+
+      if (value) {
+        // TODO: Sanitize input
+        file.value = value;
+      }
 
       return file.save();
     },
