@@ -1,6 +1,7 @@
 type User {
   email: String!
   files: [File!]!
+  playgrounds: [Playground!]!
   id: ID!
 }
 

@@ -1,10 +1,13 @@
 import { AuthError } from '@graphql/customErrors';
 import { Resolvers } from '@graphql/types';
-import File, { IFileDoc } from '@models/File';
+import File from '@models/File';
 import Playground from '@models/Playground';
 import { createDefaultFiles } from '@utils/createDefaultFiles';
 
 export const playgroundResolvers: Resolvers = {
+  User: {
+    playgrounds: async (_, __, { userId }) => Playground.find({ user: userId }),
+  },
   Playground: {
     files: async (parent) =>
       // Use _id because id doesnt exists in the POJO

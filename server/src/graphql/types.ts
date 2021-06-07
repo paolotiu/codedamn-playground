@@ -104,6 +104,7 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String'];
   files: Array<File>;
+  playgrounds: Array<Playground>;
   id: Scalars['ID'];
 };
 
@@ -258,6 +259,7 @@ export type QueryResolvers<ContextType = ApolloContext, ParentType extends Resol
 export type UserResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   files?: Resolver<Array<ResolversTypes['File']>, ParentType, ContextType>;
+  playgrounds?: Resolver<Array<ResolversTypes['Playground']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
