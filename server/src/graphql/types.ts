@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { LeanIUserDoc } from '../models/User';
+import { LeanIPlaygroundDoc } from '../models/Playground';
 import { ApolloContext } from './contextType';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -33,6 +34,7 @@ export type File = {
 export type Mutation = {
   __typename?: 'Mutation';
   createFile: File;
+  createPlayground: Playground;
   login: UserResponse;
   register: UserResponse;
   updateFile?: Maybe<File>;
@@ -42,6 +44,11 @@ export type Mutation = {
 export type MutationCreateFileArgs = {
   name: Scalars['String'];
   playgroundId: Scalars['String'];
+};
+
+
+export type MutationCreatePlaygroundArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -59,6 +66,13 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateFileArgs = {
   data: UpdateFileInput;
+};
+
+export type Playground = {
+  __typename?: 'Playground';
+  name: Scalars['String'];
+  files?: Maybe<Array<File>>;
+  id?: Maybe<Scalars['ID']>;
 };
 
 export type Query = {
@@ -181,6 +195,7 @@ export type ResolversTypes = {
   File: ResolverTypeWrapper<File>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
+  Playground: ResolverTypeWrapper<LeanIPlaygroundDoc>;
   Query: ResolverTypeWrapper<{}>;
   UpdateFileInput: UpdateFileInput;
   User: ResolverTypeWrapper<LeanIUserDoc>;
@@ -195,6 +210,7 @@ export type ResolversParentTypes = {
   File: File;
   ID: Scalars['ID'];
   Mutation: {};
+  Playground: LeanIPlaygroundDoc;
   Query: {};
   UpdateFileInput: UpdateFileInput;
   User: LeanIUserDoc;
@@ -218,9 +234,17 @@ export type FileResolvers<ContextType = ApolloContext, ParentType extends Resolv
 
 export type MutationResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationCreateFileArgs, 'name' | 'playgroundId'>>;
+  createPlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationCreatePlaygroundArgs, 'name'>>;
   login?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password'>>;
   updateFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUpdateFileArgs, 'data'>>;
+};
+
+export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Playground'] = ResolversParentTypes['Playground']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  files?: Resolver<Maybe<Array<ResolversTypes['File']>>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -247,6 +271,7 @@ export type Resolvers<ContextType = ApolloContext> = {
   FieldError?: FieldErrorResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Playground?: PlaygroundResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserResponse?: UserResponseResolvers<ContextType>;

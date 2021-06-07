@@ -1,0 +1,9 @@
+type Playground {
+  name: String!
+  files: [File!]
+  id: ID
+}
+
+type Mutation {
+  createPlayground(name: String!): Playground!
+}
