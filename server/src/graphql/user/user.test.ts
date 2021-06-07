@@ -1,20 +1,10 @@
 import { MutationLoginArgs } from '@graphql/types';
 import User from '@models/User';
+import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import { LOGIN_MUTATION, REGISTER_MUTATION } from '@testUtils/user.operations';
-import { createApolloServer } from '@utils/createApolloServer';
-import { createTestClient } from 'apollo-server-integration-testing';
 
-const apolloServer = createApolloServer();
-const { mutate, setOptions } = createTestClient({ apolloServer });
 
-// Default client options
-setOptions({
-  request: {
-    session: {
-      userId: undefined,
-    },
-  },
-});
+const {mutate} = createApolloTestClient()
 
 const loginMutation = (variables: MutationLoginArgs) =>
   mutate<{ login: { user: { email: string } | null; errors: any[] } }>(

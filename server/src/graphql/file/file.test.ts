@@ -6,25 +6,14 @@ import {
   MutationUpdateFileArgs,
 } from '@graphql/types';
 import Playground from '@models/Playground';
+import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import {
   CREATE_FILE_MUTATION,
   UPDATE_FILE_MUTATION,
 } from '@testUtils/file.operations';
 import { LOGIN_MUTATION, REGISTER_MUTATION } from '@testUtils/user.operations';
-import { createApolloServer } from '@utils/createApolloServer';
-import { createTestClient } from 'apollo-server-integration-testing';
 
-const apolloServer = createApolloServer();
-const { mutate, setOptions } = createTestClient({
-  apolloServer,
-});
-
-// default client options
-setOptions({
-  request: {
-    session: { userId: undefined },
-  },
-});
+const { mutate } = createApolloTestClient();
 
 const registerMutation = (variables: MutationRegisterArgs) =>
   mutate(REGISTER_MUTATION, { variables });
@@ -43,14 +32,16 @@ const updateFileMutation = (variables: MutationUpdateFileArgs) =>
 
 describe('File operations', () => {
   const mockUser = { email: 'test@test.com', password: 'testPassword' };
+  let userId: string;
 
   it('Login user', async () => {
     await registerMutation(mockUser);
     let { data } = await loginMutation(mockUser);
-    if (!data) {
-    }
+
     // Confirm test user logs in
     expect(data?.login.user).not.toBeNull();
+
+    userId = data!.login.user.id;
   });
 
   const mockFile: Partial<File> = {
@@ -60,7 +51,7 @@ describe('File operations', () => {
   };
 
   it('Creates file', async () => {
-    const pg = await new Playground({ name: 'Test' }).save();
+    const pg = await new Playground({ name: 'Test', user: userId }).save();
 
     const { data } = await createFileMutation({
       name: mockFile.name || '',
