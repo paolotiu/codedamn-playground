@@ -1,6 +1,6 @@
 type User {
   email: String!
-  files: [File]
+  files: [File!]!
   id: ID!
 }
 

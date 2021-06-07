@@ -87,7 +87,7 @@ export type UpdateFileInput = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
-  files?: Maybe<Array<Maybe<File>>>;
+  files: Array<File>;
   id: Scalars['ID'];
 };
 
@@ -231,7 +231,7 @@ export type QueryResolvers<ContextType = ApolloContext, ParentType extends Resol
 
 export type UserResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  files?: Resolver<Maybe<Array<Maybe<ResolversTypes['File']>>>, ParentType, ContextType>;
+  files?: Resolver<Array<ResolversTypes['File']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
