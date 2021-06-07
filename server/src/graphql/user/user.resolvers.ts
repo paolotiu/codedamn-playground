@@ -1,4 +1,3 @@
-import File from '@models/File';
 import User from '@models/User';
 import bcrypt from 'bcryptjs';
 import { Resolvers } from '../types';
