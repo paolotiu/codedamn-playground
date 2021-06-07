@@ -5,6 +5,7 @@ import {
   MutationRegisterArgs,
   MutationUpdateFileArgs,
 } from '@graphql/types';
+import Playground from '@models/Playground';
 import {
   CREATE_FILE_MUTATION,
   UPDATE_FILE_MUTATION,
@@ -59,7 +60,12 @@ describe('File operations', () => {
   };
 
   it('Creates file', async () => {
-    const { data } = await createFileMutation({ name: mockFile.name || '' });
+    const pg = await new Playground({ name: 'Test' }).save();
+
+    const { data } = await createFileMutation({
+      name: mockFile.name || '',
+      playgroundId: pg.id,
+    });
 
     // Returns correct name
     expect(data?.createFile.name).toEqual(mockFile.name);

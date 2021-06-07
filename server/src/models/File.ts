@@ -7,8 +7,8 @@ export interface IFile {
   value: string;
   mimeType: string;
   name: string;
-  user: ObjectId | IUserDoc;
-  playground: ObjectId | IPlaygroundDoc;
+  user: ObjectId | string | IUserDoc;
+  playground: ObjectId | string | IPlaygroundDoc;
 }
 
 export interface IFileDoc extends IFile, Document {

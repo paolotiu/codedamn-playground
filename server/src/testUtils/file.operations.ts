@@ -1,8 +1,8 @@
 import { gql } from 'apollo-server-express';
 
 export const CREATE_FILE_MUTATION = gql`
-  mutation createFile($name: String!) {
-    createFile(name: $name) {
+  mutation createFile($name: String!, $playgroundId: String!) {
+    createFile(name: $name, playgroundId: $playgroundId) {
       id
       name
       value

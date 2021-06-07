@@ -15,7 +15,7 @@ export const fileResolvers: Resolvers = {
     },
   },
   Mutation: {
-    createFile: async (_, { name }, { userId }) => {
+    createFile: async (_, { name, playgroundId }, { userId }) => {
       if (!userId) throw new AuthError();
 
       const mimeType = mime.lookup(name);
@@ -23,6 +23,7 @@ export const fileResolvers: Resolvers = {
         name,
         mimeType,
         user: userId,
+        playground: playgroundId,
       });
 
       return file.save();

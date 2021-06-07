@@ -24,6 +24,6 @@ const PlaygroundSchemaFields: InterfaceSchema<IPlayground> = {
   ],
 };
 
-const PlaygroundSchema = new Schema(PlaygroundSchemaFields);
+const PlaygroundSchema = new Schema<IPlaygroundDoc>(PlaygroundSchemaFields);
 
-export default model('', PlaygroundSchema);
+export default model<IPlaygroundDoc>('Playground', PlaygroundSchema);

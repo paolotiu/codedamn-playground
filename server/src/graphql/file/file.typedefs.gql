@@ -16,7 +16,7 @@ type Query {
   getFileById(id: ID!): File
 }
 type Mutation {
-  createFile(name: String!): File!
+  createFile(name: String!, playgroundId: String!): File!
 
   updateFile(data: UpdateFileInput!): File
 }
