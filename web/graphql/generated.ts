@@ -1,6 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
-import { useQuery, UseQueryOptions } from 'react-query';
-
+import { useQuery, UseQueryOptions, useMutation, UseMutationOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -40,18 +39,22 @@ export type Mutation = {
   login: UserResponse;
 };
 
+
 export type MutationCreateFileArgs = {
   name: Scalars['String'];
 };
+
 
 export type MutationUpdateFileArgs = {
   data: UpdateFileInput;
 };
 
+
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
 };
+
 
 export type MutationLoginArgs = {
   email: Scalars['String'];
@@ -66,9 +69,11 @@ export type Query = {
   me?: Maybe<User>;
 };
 
+
 export type QueryGetFileArgs = {
   name: Scalars['String'];
 };
+
 
 export type QueryGetFileByIdArgs = {
   id: Scalars['ID'];
@@ -93,22 +98,73 @@ export type UserResponse = {
   errors?: Maybe<Array<Maybe<FieldError>>>;
 };
 
-export type PingQueryVariables = Exact<{ [key: string]: never }>;
+export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type PingQuery = { __typename?: 'Query' } & Pick<Query, 'ping'>;
+
+export type PingQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'ping'>
+);
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'email'>
+    )>, errors?: Maybe<Array<Maybe<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message'>
+    )>>> }
+  ) }
+);
+
 
 export const PingDocument = `
     query ping {
   ping
 }
     `;
-export const usePingQuery = <TData = PingQuery, TError = unknown>(
-  client: GraphQLClient,
-  variables?: PingQueryVariables,
-  options?: UseQueryOptions<PingQuery, TError, TData>,
-) =>
-  useQuery<PingQuery, TError, TData>(
-    ['ping', variables],
-    fetcher<PingQuery, PingQueryVariables>(client, PingDocument, variables),
-    options,
-  );
+export const usePingQuery = <
+      TData = PingQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables?: PingQueryVariables, 
+      options?: UseQueryOptions<PingQuery, TError, TData>
+    ) => 
+    useQuery<PingQuery, TError, TData>(
+      ['ping', variables],
+      fetcher<PingQuery, PingQueryVariables>(client, PingDocument, variables),
+      options
+    );
+export const LoginDocument = `
+    mutation login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    user {
+      email
+    }
+    errors {
+      message
+    }
+  }
+}
+    `;
+export const useLoginMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<LoginMutation, TError, LoginMutationVariables, TContext>
+    ) => 
+    useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
+      (variables?: LoginMutationVariables) => fetcher<LoginMutation, LoginMutationVariables>(client, LoginDocument, variables)(),
+      options
+    );
