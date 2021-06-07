@@ -3,12 +3,10 @@ import session from 'express-session';
 import 'dotenv/config';
 import { createApolloServer } from '@utils/createApolloServer';
 import { createMongooseConnection } from '@utils/createMongooseConnection';
-import cors from 'cors';
 
 const startApolloServer = async () => {
   const app = express();
 
-  app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
   // For now we're using the memory to store the sessions
   // In the future we'll want to use something like Redis to persist users
   // even if the server restarts
@@ -28,16 +26,17 @@ const startApolloServer = async () => {
     })
   );
 
-  app.use((req, res, next) => {
-    console.log(req.cookies);
-    next();
-  });
-
   const server = createApolloServer();
 
   await server.start();
 
-  server.applyMiddleware({ app, cors: false });
+  server.applyMiddleware({
+    app,
+    cors: {
+      credentials: true,
+      origin: ['http://localhost:3000'],
+    },
+  });
 
   await createMongooseConnection();
   await new Promise<void>((resolve) => app.listen(4000, resolve));
