@@ -5,7 +5,7 @@ interface Props {
   files: File[];
 }
 
-const FileList = ({ files }: Props) => {
+const FileExplorer = ({ files }: Props) => {
   return (
     <div className="h-full p-4 overflow-hidden text-gray-300 bg-black pane-content">
       {files.map((file) => {
@@ -19,4 +19,4 @@ const FileList = ({ files }: Props) => {
   );
 };
 
-export default FileList;
+export default FileExplorer;
