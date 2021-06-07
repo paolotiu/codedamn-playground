@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.terminal {
+  /* Fixes bug where terminal wouldnt fit to the full size of the parent */
+  /* Related issue: https://github.com/xtermjs/xterm.js/issues/389 */
+  height: 100%;
+
+  /* Add some breathing room */
+  padding: 1em;
+}
+
+/* Override xterm scrollbar */
+.xterm-viewport::-webkit-scrollbar {
+  width: 1em;
+}
+
+.xterm-viewport::-webkit-scrollbar-thumb {
+  /* Replicate vs-dark scrollbar color */
+  background-color: hsla(0, 0%, 47.5%, 0.4);
+}
