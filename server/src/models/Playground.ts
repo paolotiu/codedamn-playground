@@ -1,5 +1,4 @@
 import { Schema, model, ObjectId, Document, LeanDocument } from 'mongoose';
-import { IFileDoc } from './File';
 import { IUserDoc } from './User';
 import { InterfaceSchema } from './utilTypes';
 
