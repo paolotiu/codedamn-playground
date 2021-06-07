@@ -1,4 +1,5 @@
 import { Schema, model, Document, ObjectId } from 'mongoose';
+import { IPlaygroundDoc } from './Playground';
 import { IUserDoc } from './User';
 import { InterfaceSchema } from './utilTypes';
 
@@ -6,10 +7,11 @@ export interface IFile {
   value: string;
   mimeType: string;
   name: string;
-  user: string | ObjectId | IUserDoc;
+  user: ObjectId | IUserDoc;
+  playground: ObjectId | IPlaygroundDoc;
 }
 
-interface IFileDoc extends IFile, Document {
+export interface IFileDoc extends IFile, Document {
   id: string;
 }
 
@@ -29,6 +31,11 @@ const FileSchemaFields: InterfaceSchema<IFile> = {
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
+  },
+  playground: {
+    type: Schema.Types.ObjectId,
+    ref: 'Playground',
     required: true,
   },
 };
