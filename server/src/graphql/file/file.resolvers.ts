@@ -1,27 +1,27 @@
 import { AuthError, NotFoundByIdError } from '@graphql/customErrors';
 import File from '@models/File';
-import mime from 'mime-types';
 import { Resolvers } from '../types';
 
 export const fileResolvers: Resolvers = {
+  File: {
+    id: (parent) => parent._id.toString(),
+  },
   Query: {
-    getFile: async (_, { name }, { userId }) => {
+    getFile: async (_, { id }, { userId }) => {
       if (!userId) throw new AuthError();
-      return File.findOne({ name, user: userId });
+      return File.findOne({ _id: id, user: userId }).lean({ virtuals: true });
     },
-    getFileById: async (_, { id }, { userId }) => {
-      if (!userId) throw new AuthError();
-      return File.findOne({ _id: id, user: userId });
-    },
+    // getFileById: async (_, { id }, { userId }) => {
+    //   if (!userId) throw new AuthError();
+    //   return File.findOne({ _id: id, user: userId });
+    // },
   },
   Mutation: {
     createFile: async (_, { name, playgroundId }, { userId }) => {
       if (!userId) throw new AuthError();
 
-      const mimeType = mime.lookup(name);
       const file = new File({
         name,
-        mimeType,
         user: userId,
         playground: playgroundId,
       });
@@ -34,13 +34,9 @@ export const fileResolvers: Resolvers = {
       if (!file) throw new NotFoundByIdError({ item: 'file' });
       if (name) {
         file.name = name;
-
-        // Generate new mimeType if extension changes;
-        file.mimeType = String(mime.lookup(name));
       }
 
       if (value) {
-        // TODO: Sanitize input
         file.value = value;
       }
 

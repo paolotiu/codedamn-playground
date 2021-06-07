@@ -7,6 +7,7 @@ generates:
       mappers:
         User: ../models/User#LeanIUserDoc
         Playground: ../models/Playground#LeanIPlaygroundDoc
+        File: ../models/File#LeanIFileDoc
       contextType: ./contextType#ApolloContext
     plugins:
       - 'typescript'

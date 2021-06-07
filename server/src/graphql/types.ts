@@ -1,6 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { LeanIUserDoc } from '../models/User';
 import { LeanIPlaygroundDoc } from '../models/Playground';
+import { LeanIFileDoc } from '../models/File';
 import { ApolloContext } from './contextType';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -78,7 +79,6 @@ export type Playground = {
 export type Query = {
   __typename?: 'Query';
   getFile?: Maybe<File>;
-  getFileById?: Maybe<File>;
   getPlayground?: Maybe<Playground>;
   me?: Maybe<User>;
   ping: Scalars['String'];
@@ -86,11 +86,6 @@ export type Query = {
 
 
 export type QueryGetFileArgs = {
-  name: Scalars['String'];
-};
-
-
-export type QueryGetFileByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -198,7 +193,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   FieldError: ResolverTypeWrapper<FieldError>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  File: ResolverTypeWrapper<File>;
+  File: ResolverTypeWrapper<LeanIFileDoc>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Mutation: ResolverTypeWrapper<{}>;
   Playground: ResolverTypeWrapper<LeanIPlaygroundDoc>;
@@ -213,7 +208,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   FieldError: FieldError;
   String: Scalars['String'];
-  File: File;
+  File: LeanIFileDoc;
   ID: Scalars['ID'];
   Mutation: {};
   Playground: LeanIPlaygroundDoc;
@@ -254,8 +249,7 @@ export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends 
 };
 
 export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileArgs, 'name'>>;
-  getFileById?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileByIdArgs, 'id'>>;
+  getFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileArgs, 'id'>>;
   getPlayground?: Resolver<Maybe<ResolversTypes['Playground']>, ParentType, ContextType, RequireFields<QueryGetPlaygroundArgs, 'id'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
