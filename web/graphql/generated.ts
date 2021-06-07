@@ -88,7 +88,7 @@ export type UpdateFileInput = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
-  files?: Maybe<Array<Maybe<File>>>;
+  files: Array<File>;
   id: Scalars['ID'];
 };
 
@@ -97,6 +97,20 @@ export type UserResponse = {
   user?: Maybe<User>;
   errors?: Maybe<Array<Maybe<FieldError>>>;
 };
+
+export type FilesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FilesQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & { files: Array<(
+      { __typename?: 'File' }
+      & Pick<File, 'id' | 'name' | 'value' | 'mimeType'>
+    )> }
+  )> }
+);
 
 export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -127,6 +141,31 @@ export type LoginMutation = (
 );
 
 
+export const FilesDocument = `
+    query files {
+  me {
+    files {
+      id
+      name
+      value
+      mimeType
+    }
+  }
+}
+    `;
+export const useFilesQuery = <
+      TData = FilesQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables?: FilesQueryVariables, 
+      options?: UseQueryOptions<FilesQuery, TError, TData>
+    ) => 
+    useQuery<FilesQuery, TError, TData>(
+      ['files', variables],
+      fetcher<FilesQuery, FilesQueryVariables>(client, FilesDocument, variables),
+      options
+    );
 export const PingDocument = `
     query ping {
   ping

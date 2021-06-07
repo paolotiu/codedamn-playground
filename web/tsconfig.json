@@ -21,7 +21,7 @@
     "paths": {
       "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],
-      "@interfaces/*": ["interfaces/*"],
+      "@gql/*": ["graphql/*"],
       "@styles/*": ["styles/*"]
     }
   },
