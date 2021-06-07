@@ -11,6 +11,17 @@ export const CREATE_FILE_MUTATION = gql`
   }
 `;
 
+export const GET_FILE_QUERY = gql`
+  query getFile($id: ID!) {
+    getFile(id: $id) {
+      id
+      name
+      value
+      mimeType
+    }
+  }
+`;
+
 export const UPDATE_FILE_MUTATION = gql`
   mutation updateFile($data: UpdateFileInput!) {
     updateFile(data: $data) {
