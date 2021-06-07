@@ -7,9 +7,6 @@ const invalidLogin = {
   errors: [{ path: 'login', message: 'The email or password is incorrect' }],
 };
 export const userResolvers: Resolvers = {
-  User: {
-    files: async (parent) => File.find({ user: parent.id }),
-  },
   Query: {
     me: async (_, __, { userId }) => {
       const user = await User.findById(userId).lean();

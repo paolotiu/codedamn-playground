@@ -3,9 +3,13 @@ import File from '@models/File';
 import { Resolvers } from '../types';
 
 export const fileResolvers: Resolvers = {
+  User: {
+    files: async (parent) => File.find({ user: parent.id }),
+  },
   File: {
     id: (parent) => parent._id.toString(),
   },
+
   Query: {
     getFile: async (_, { id }, { userId }) => {
       if (!userId) throw new AuthError();
