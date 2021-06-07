@@ -79,6 +79,7 @@ export type Query = {
   __typename?: 'Query';
   getFile?: Maybe<File>;
   getFileById?: Maybe<File>;
+  getPlayground?: Maybe<Playground>;
   me?: Maybe<User>;
   ping: Scalars['String'];
 };
@@ -90,6 +91,11 @@ export type QueryGetFileArgs = {
 
 
 export type QueryGetFileByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetPlaygroundArgs = {
   id: Scalars['ID'];
 };
 
@@ -250,6 +256,7 @@ export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends 
 export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileArgs, 'name'>>;
   getFileById?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileByIdArgs, 'id'>>;
+  getPlayground?: Resolver<Maybe<ResolversTypes['Playground']>, ParentType, ContextType, RequireFields<QueryGetPlaygroundArgs, 'id'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };

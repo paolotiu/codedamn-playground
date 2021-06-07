@@ -1,11 +1,16 @@
 import { AuthError } from '@graphql/customErrors';
-import { File, Resolvers } from '@graphql/types';
+import { Resolvers } from '@graphql/types';
 import { IFileDoc } from '@models/File';
 import Playground from '@models/Playground';
 
 export const playgroundResolvers: Resolvers = {
   Playground: {
     files: async (parent) => (areFiles(parent.files) ? parent.files : []),
+    id: (parent) => parent._id.toString(),
+  },
+  Query: {
+    getPlayground: async (_, { id }, { userId }) =>
+      Playground.findOne({ _id: id, user: userId }).lean(),
   },
   Mutation: {
     createPlayground: (_, { name }, { userId }) => {

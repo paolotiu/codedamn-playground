@@ -4,6 +4,10 @@ type Playground {
   id: ID
 }
 
+type Query {
+  getPlayground(id: ID!): Playground
+}
+
 type Mutation {
   createPlayground(name: String!): Playground!
 }
