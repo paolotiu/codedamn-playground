@@ -3,6 +3,7 @@ import {
   Playground as PlaygroundType,
   QueryGetPlaygroundArgs,
 } from '@graphql/types';
+import File from '@models/File';
 import Playground from '@models/Playground';
 import User from '@models/User';
 import { createApolloTestClient } from '@testUtils/createApolloTestClient';
@@ -23,12 +24,15 @@ const getPlaygroundQuery = (variables: QueryGetPlaygroundArgs) =>
 
 describe('Playground Operations', () => {
   const mockPlayground: Partial<PlaygroundType> = { name: 'Mock Plaground' };
+  let userId: string;
   it('Creates playground', async () => {
     const user = await new User({
       email: 'playground@test.com',
       password: 'testPassword',
     }).save();
-    setOptions({ request: { session: { userId: user.id } } });
+    userId = user.id;
+
+    setOptions({ request: { session: { userId } } });
 
     const { data } = await createPlaygroundMutation({
       name: mockPlayground.name || '',
@@ -46,6 +50,15 @@ describe('Playground Operations', () => {
 
     // Update mockPlayground
     Object.assign(mockPlayground, data?.createPlayground);
+  });
+
+  it('Creates default files', async () => {
+    const files = await File.find({
+      playground: mockPlayground.id || '',
+      user: userId,
+    });
+
+    expect(files.length).toBe(3);
   });
 
   it('Gets playground', async () => {

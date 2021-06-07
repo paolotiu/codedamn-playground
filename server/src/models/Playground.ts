@@ -5,7 +5,6 @@ import { InterfaceSchema } from './utilTypes';
 
 export interface IPlayground {
   name: string;
-  files: IFileDoc[] | ObjectId[] | string[];
   user: ObjectId | string | IUserDoc;
 }
 
@@ -20,12 +19,6 @@ const PlaygroundSchemaFields: InterfaceSchema<IPlayground> = {
     type: String,
     required: true,
   },
-  files: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'File',
-    },
-  ],
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
