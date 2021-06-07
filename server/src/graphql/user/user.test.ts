@@ -3,8 +3,7 @@ import User from '@models/User';
 import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import { LOGIN_MUTATION, REGISTER_MUTATION } from '@testUtils/user.operations';
 
-
-const {mutate} = createApolloTestClient()
+const { mutate } = createApolloTestClient();
 
 const loginMutation = (variables: MutationLoginArgs) =>
   mutate<{ login: { user: { email: string } | null; errors: any[] } }>(
@@ -13,7 +12,7 @@ const loginMutation = (variables: MutationLoginArgs) =>
   );
 
 describe('Auth flow', () => {
-  const mockUser = { email: 'test@test.com', password: 'testPassword' };
+  const mockUser = { email: 'user@test.com', password: 'testPassword' };
   it('Registers user', async () => {
     await mutate(REGISTER_MUTATION, {
       variables: mockUser,
