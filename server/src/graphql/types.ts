@@ -72,7 +72,7 @@ export type Playground = {
   __typename?: 'Playground';
   name: Scalars['String'];
   files?: Maybe<Array<File>>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
 };
 
 export type Query = {
@@ -90,6 +90,16 @@ export type QueryGetFileArgs = {
 
 
 export type QueryGetPlaygroundArgs = {
+  id: Scalars['ID'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  playground?: Maybe<Scalars['Int']>;
+};
+
+
+export type SubscriptionPlaygroundArgs = {
   id: Scalars['ID'];
 };
 
@@ -198,6 +208,8 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Playground: ResolverTypeWrapper<LeanIPlaygroundDoc>;
   Query: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   UpdateFileInput: UpdateFileInput;
   User: ResolverTypeWrapper<LeanIUserDoc>;
   UserResponse: ResolverTypeWrapper<Omit<UserResponse, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
@@ -213,6 +225,8 @@ export type ResolversParentTypes = {
   Mutation: {};
   Playground: LeanIPlaygroundDoc;
   Query: {};
+  Subscription: {};
+  Int: Scalars['Int'];
   UpdateFileInput: UpdateFileInput;
   User: LeanIUserDoc;
   UserResponse: Omit<UserResponse, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
@@ -243,7 +257,7 @@ export type MutationResolvers<ContextType = ApolloContext, ParentType extends Re
 export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Playground'] = ResolversParentTypes['Playground']> = {
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   files?: Resolver<Maybe<Array<ResolversTypes['File']>>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -252,6 +266,10 @@ export type QueryResolvers<ContextType = ApolloContext, ParentType extends Resol
   getPlayground?: Resolver<Maybe<ResolversTypes['Playground']>, ParentType, ContextType, RequireFields<QueryGetPlaygroundArgs, 'id'>>;
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  playground?: SubscriptionResolver<Maybe<ResolversTypes['Int']>, "playground", ParentType, ContextType, RequireFields<SubscriptionPlaygroundArgs, 'id'>>;
 };
 
 export type UserResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -274,6 +292,7 @@ export type Resolvers<ContextType = ApolloContext> = {
   Mutation?: MutationResolvers<ContextType>;
   Playground?: PlaygroundResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserResponse?: UserResponseResolvers<ContextType>;
 };

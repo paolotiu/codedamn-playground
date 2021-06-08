@@ -29,4 +29,10 @@ export const playgroundResolvers: Resolvers = {
       return playground;
     },
   },
+  Subscription: {
+    playground: {
+      subscribe: (_, __, { pubsub }) =>
+        pubsub.asyncIterator(['PLAYGROUND_UPDATED', 'FILE_UPDATED']),
+    },
+  },
 };

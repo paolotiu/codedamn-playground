@@ -1,7 +1,7 @@
 type Playground {
   name: String!
   files: [File!]
-  id: ID
+  id: ID!
 }
 
 type Query {
@@ -10,4 +10,8 @@ type Query {
 
 type Mutation {
   createPlayground(name: String!): Playground!
+}
+
+type Subscription {
+  playground(id: ID!): Int
 }
