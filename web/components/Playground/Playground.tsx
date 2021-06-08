@@ -14,8 +14,8 @@ import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 
 import 'xterm/css/xterm.css';
 import 'react-reflex/styles.css';
-import { getFileLanguage } from '@utils/getFileLanguage';
 import { useDebouncedCallback } from 'use-debounce';
+import { getFileType } from '@utils/getFileType';
 
 const Terminal = dynamic(() => import('@components/Terminal/Terminal'), { ssr: false });
 
@@ -99,7 +99,7 @@ const Playground = ({ id: playgroundId }: Props) => {
                   <Editor
                     files={files}
                     value={activeFile.value}
-                    language={getFileLanguage(activeFile.name) || ''}
+                    language={getFileType(activeFile.name) || ''}
                     path={activeFile.name}
                     theme="myTheme"
                     options={{

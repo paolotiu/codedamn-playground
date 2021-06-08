@@ -7,6 +7,6 @@ mime.define(
   true,
 );
 
-export const getFileLanguage = (name: string) => {
+export const getFileType = (name: string) => {
   return mime.getType(name);
 };
