@@ -20,3 +20,14 @@
   /* Replicate vs-dark scrollbar color */
   background-color: hsla(0, 0%, 47.5%, 0.4);
 }
+
+/* Override reflex splitter styling */
+body .reflex-container.vertical > .reflex-splitter,
+body .reflex-container.horizontal > .reflex-splitter {
+  background-color: #2e2e2e;
+  border: 0;
+}
+
+body .reflex-container.vertical > .reflex-splitter {
+  width: 4px;
+}
