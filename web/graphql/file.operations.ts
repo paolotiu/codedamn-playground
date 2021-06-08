@@ -11,3 +11,11 @@ export const USER_FILES_QUERY = gql`
     }
   }
 `;
+
+export const UPDATE_FILE_MUTATION = gql`
+  mutation updateFile($data: UpdateFileInput!) {
+    updateFile(data: $data) {
+      id
+    }
+  }
+`;

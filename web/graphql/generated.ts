@@ -71,7 +71,7 @@ export type Playground = {
   __typename?: 'Playground';
   name: Scalars['String'];
   files?: Maybe<Array<File>>;
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
 };
 
 export type Query = {
@@ -89,6 +89,16 @@ export type QueryGetFileArgs = {
 
 
 export type QueryGetPlaygroundArgs = {
+  id: Scalars['ID'];
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  playground?: Maybe<Scalars['Int']>;
+};
+
+
+export type SubscriptionPlaygroundArgs = {
   id: Scalars['ID'];
 };
 
@@ -126,12 +136,56 @@ export type FilesQuery = (
   )> }
 );
 
+export type UpdateFileMutationVariables = Exact<{
+  data: UpdateFileInput;
+}>;
+
+
+export type UpdateFileMutation = (
+  { __typename?: 'Mutation' }
+  & { updateFile?: Maybe<(
+    { __typename?: 'File' }
+    & Pick<File, 'id'>
+  )> }
+);
+
 export type PingQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type PingQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'ping'>
+);
+
+export type GetPlaygroundQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetPlaygroundQuery = (
+  { __typename?: 'Query' }
+  & { getPlayground?: Maybe<(
+    { __typename?: 'Playground' }
+    & Pick<Playground, 'name'>
+    & { files?: Maybe<Array<(
+      { __typename?: 'File' }
+      & Pick<File, 'id' | 'name' | 'value'>
+    )>> }
+  )> }
+);
+
+export type GetAllPlaygroundsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllPlaygroundsQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & { playgrounds: Array<(
+      { __typename?: 'Playground' }
+      & Pick<Playground, 'id' | 'name'>
+    )> }
+  )> }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -179,6 +233,24 @@ export const useFilesQuery = <
       fetcher<FilesQuery, FilesQueryVariables>(client, FilesDocument, variables),
       options
     );
+export const UpdateFileDocument = `
+    mutation updateFile($data: UpdateFileInput!) {
+  updateFile(data: $data) {
+    id
+  }
+}
+    `;
+export const useUpdateFileMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<UpdateFileMutation, TError, UpdateFileMutationVariables, TContext>
+    ) => 
+    useMutation<UpdateFileMutation, TError, UpdateFileMutationVariables, TContext>(
+      (variables?: UpdateFileMutationVariables) => fetcher<UpdateFileMutation, UpdateFileMutationVariables>(client, UpdateFileDocument, variables)(),
+      options
+    );
 export const PingDocument = `
     query ping {
   ping
@@ -195,6 +267,54 @@ export const usePingQuery = <
     useQuery<PingQuery, TError, TData>(
       ['ping', variables],
       fetcher<PingQuery, PingQueryVariables>(client, PingDocument, variables),
+      options
+    );
+export const GetPlaygroundDocument = `
+    query getPlayground($id: ID!) {
+  getPlayground(id: $id) {
+    name
+    files {
+      id
+      name
+      value
+    }
+  }
+}
+    `;
+export const useGetPlaygroundQuery = <
+      TData = GetPlaygroundQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables: GetPlaygroundQueryVariables, 
+      options?: UseQueryOptions<GetPlaygroundQuery, TError, TData>
+    ) => 
+    useQuery<GetPlaygroundQuery, TError, TData>(
+      ['getPlayground', variables],
+      fetcher<GetPlaygroundQuery, GetPlaygroundQueryVariables>(client, GetPlaygroundDocument, variables),
+      options
+    );
+export const GetAllPlaygroundsDocument = `
+    query getAllPlaygrounds {
+  me {
+    playgrounds {
+      id
+      name
+    }
+  }
+}
+    `;
+export const useGetAllPlaygroundsQuery = <
+      TData = GetAllPlaygroundsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables?: GetAllPlaygroundsQueryVariables, 
+      options?: UseQueryOptions<GetAllPlaygroundsQuery, TError, TData>
+    ) => 
+    useQuery<GetAllPlaygroundsQuery, TError, TData>(
+      ['getAllPlaygrounds', variables],
+      fetcher<GetAllPlaygroundsQuery, GetAllPlaygroundsQueryVariables>(client, GetAllPlaygroundsDocument, variables),
       options
     );
 export const LoginDocument = `
