@@ -28,13 +28,13 @@ export type File = {
   id: Scalars['ID'];
   name: Scalars['String'];
   value: Scalars['String'];
-  mimeType: Scalars['String'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   createFile: File;
   updateFile?: Maybe<File>;
+  createPlayground: Playground;
   register: UserResponse;
   login: UserResponse;
 };
@@ -42,11 +42,17 @@ export type Mutation = {
 
 export type MutationCreateFileArgs = {
   name: Scalars['String'];
+  playgroundId: Scalars['String'];
 };
 
 
 export type MutationUpdateFileArgs = {
   data: UpdateFileInput;
+};
+
+
+export type MutationCreatePlaygroundArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -61,21 +67,28 @@ export type MutationLoginArgs = {
   password: Scalars['String'];
 };
 
+export type Playground = {
+  __typename?: 'Playground';
+  name: Scalars['String'];
+  files?: Maybe<Array<File>>;
+  id?: Maybe<Scalars['ID']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getFile?: Maybe<File>;
-  getFileById?: Maybe<File>;
+  getPlayground?: Maybe<Playground>;
   ping: Scalars['String'];
   me?: Maybe<User>;
 };
 
 
 export type QueryGetFileArgs = {
-  name: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 
-export type QueryGetFileByIdArgs = {
+export type QueryGetPlaygroundArgs = {
   id: Scalars['ID'];
 };
 
@@ -89,6 +102,7 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String'];
   files: Array<File>;
+  playgrounds: Array<Playground>;
   id: Scalars['ID'];
 };
 
@@ -107,7 +121,7 @@ export type FilesQuery = (
     { __typename?: 'User' }
     & { files: Array<(
       { __typename?: 'File' }
-      & Pick<File, 'id' | 'name' | 'value' | 'mimeType'>
+      & Pick<File, 'id' | 'name' | 'value'>
     )> }
   )> }
 );
@@ -148,7 +162,6 @@ export const FilesDocument = `
       id
       name
       value
-      mimeType
     }
   }
 }

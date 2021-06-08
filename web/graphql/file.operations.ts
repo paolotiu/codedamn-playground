@@ -7,7 +7,6 @@ export const USER_FILES_QUERY = gql`
         id
         name
         value
-        mimeType
       }
     }
   }
