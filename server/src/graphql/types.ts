@@ -29,7 +29,6 @@ export type File = {
   id: Scalars['ID'];
   name: Scalars['String'];
   value: Scalars['String'];
-  mimeType: Scalars['String'];
 };
 
 export type Mutation = {
@@ -230,7 +229,6 @@ export type FileResolvers<ContextType = ApolloContext, ParentType extends Resolv
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  mimeType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

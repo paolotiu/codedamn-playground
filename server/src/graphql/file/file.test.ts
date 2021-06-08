@@ -51,8 +51,6 @@ describe('File operations', () => {
 
   const mockFile: Partial<File> = {
     name: 'index.html',
-
-    mimeType: 'text/html',
   };
 
   it('Creates file', async () => {
@@ -65,9 +63,6 @@ describe('File operations', () => {
 
     // Returns correct name
     expect(data?.createFile.name).toEqual(mockFile.name);
-
-    // Returns correct mimeType
-    expect(data?.createFile.mimeType).toEqual(mockFile.mimeType);
 
     // update mockfile to have id and mimetype
     Object.assign(mockFile, data?.createFile);
@@ -102,6 +97,5 @@ describe('File operations', () => {
     // Updates file fields
     expect(data?.updateFile.name).toEqual(updatedMockFile.name);
     expect(data?.updateFile.value).toEqual(updatedMockFile.value);
-    expect(data?.updateFile.mimeType).toEqual(updatedMockFile.mimeType);
   });
 });

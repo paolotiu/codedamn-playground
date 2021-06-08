@@ -18,7 +18,6 @@ export const GET_PLAYGROUND_QUERY = gql`
         name
         id
         value
-        mimeType
       }
     }
   }

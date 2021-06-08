@@ -2,7 +2,6 @@ type File {
   id: ID!
   name: String!
   value: String!
-  mimeType: String!
 }
 
 input UpdateFileInput {

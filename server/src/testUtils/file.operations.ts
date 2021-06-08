@@ -6,7 +6,6 @@ export const CREATE_FILE_MUTATION = gql`
       id
       name
       value
-      mimeType
     }
   }
 `;
@@ -17,7 +16,6 @@ export const GET_FILE_QUERY = gql`
       id
       name
       value
-      mimeType
     }
   }
 `;
@@ -28,7 +26,6 @@ export const UPDATE_FILE_MUTATION = gql`
       id
       name
       value
-      mimeType
     }
   }
 `;
