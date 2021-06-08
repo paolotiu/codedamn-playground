@@ -1,5 +1,6 @@
 import React from 'react';
 import { File } from '@gql/generated';
+import { FileIcon } from '@components/FileIcon';
 
 interface Props {
   files: File[];
@@ -14,10 +15,11 @@ const FileExplorer = ({ files, onFileClick }: Props) => {
           <button
             type="button"
             key={file.id}
-            className="px-2 cursor-pointer hover:bg-gray-700 hover:text-white"
+            className="flex items-center w-full px-2 py-1 space-x-3 outline-none cursor-pointer hover:bg-gray-700 hover:text-white"
             onClick={() => onFileClick(file)}
           >
-            {file.name}
+            <FileIcon name={file.name} />
+            <span>{file.name}</span>
           </button>
         );
       })}
