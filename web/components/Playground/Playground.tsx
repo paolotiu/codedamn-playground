@@ -94,60 +94,80 @@ const Playground = ({ id: playgroundId }: Props) => {
   if (playgroundQuery.isError) return <p>Not found</p>;
 
   return (
-    <div className="h-screen">
-      <ReflexContainer orientation="vertical">
-        <ReflexElement className="left-pane" maxSize={300} flex={0.2}>
-          <FileExplorer files={files || []} onFileClick={(file) => changeActiveFile(file.id)} />
-        </ReflexElement>
-        <ReflexSplitter className="border-0 w-[4px] bg-off-black" />
-        <ReflexElement className="">
-          <ReflexContainer orientation="horizontal">
-            <ReflexElement flex={1} minSize={100}>
-              <div className="flex flex-col h-full pane-content">
-                <EditorFilePicker
-                  activeIndex={getActiveIndex()}
-                  setActiveFile={setActiveFile}
-                  files={filesInPicker}
-                  removeFromPicker={removeFromEditorFilePicker}
-                />
-                {activeFile ? (
-                  <Editor
-                    value={activeFile.value}
-                    language={getFileType(activeFile.name) || ''}
-                    path={activeFile.name}
-                    onChange={(value) => {
-                      debouncedFileUpdate({ data: { id: activeFile.id, value } });
-                    }}
-                  />
-                ) : (
-                  <EmptyEditor />
-                )}
-              </div>
-            </ReflexElement>
-          </ReflexContainer>
-        </ReflexElement>
+    <div className="flex flex-col h-screen">
+      <div className="flex justify-between px-6 py-3 font-bold text-white bg-black border-b border-off-black ">
+        <div>
+          <input
+            type="text"
+            value={playgroundQuery.data?.getPlayground?.name}
+            className="text-xl font-bold bg-transparent outline-none focus-visible:shadow-border-b-white"
+          />
+        </div>
+        <div>
+          <a
+            href={`http://localhost:4000/playground/${playgroundId}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            out
+          </a>
+        </div>
+      </div>
 
-        <ReflexSplitter />
-        <ReflexElement className="right-pane">
-          <ReflexContainer orientation="horizontal">
-            <ReflexElement className="right-pane ">
-              <iframe
-                ref={iframeRef}
-                title="Playground"
-                className="w-full h-full pane-content"
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
-                src={`http://localhost:4000/playground/${playgroundId}`}
-              ></iframe>
+      <ReflexContainer orientation="horizontal">
+        <ReflexElement>
+          <ReflexContainer orientation="vertical">
+            <ReflexElement className="left-pane" maxSize={300} flex={0.2}>
+              <FileExplorer files={files || []} onFileClick={(file) => changeActiveFile(file.id)} />
+            </ReflexElement>
+            <ReflexSplitter className="border-0 w-[4px] bg-off-black" />
+            <ReflexElement className="">
+              <ReflexContainer orientation="horizontal">
+                <ReflexElement>
+                  <div className="flex flex-col h-full pane-content">
+                    <EditorFilePicker
+                      activeIndex={getActiveIndex()}
+                      setActiveFile={setActiveFile}
+                      files={filesInPicker}
+                      removeFromPicker={removeFromEditorFilePicker}
+                    />
+                    {activeFile ? (
+                      <Editor
+                        value={activeFile.value}
+                        language={getFileType(activeFile.name) || ''}
+                        path={activeFile.name}
+                        onChange={(value) => {
+                          debouncedFileUpdate({ data: { id: activeFile.id, value } });
+                        }}
+                      />
+                    ) : (
+                      <EmptyEditor />
+                    )}
+                  </div>
+                </ReflexElement>
+              </ReflexContainer>
             </ReflexElement>
 
             <ReflexSplitter />
-            <ReflexElement
-              propagateDimensions
-              propagateDimensionsRate={200}
-              flex={0.35}
-              // style={{ overflow: 'hidden' }}
-            >
-              <Terminal />
+
+            <ReflexElement className="right-pane">
+              <ReflexContainer orientation="horizontal">
+                <ReflexElement className="right-pane ">
+                  <iframe
+                    ref={iframeRef}
+                    title="Playground"
+                    className="w-full h-full pane-content"
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
+                    src={`http://localhost:4000/playground/${playgroundId}`}
+                  ></iframe>
+                </ReflexElement>
+
+                <ReflexSplitter />
+
+                <ReflexElement flex={0.35}>
+                  <Terminal />
+                </ReflexElement>
+              </ReflexContainer>
             </ReflexElement>
           </ReflexContainer>
         </ReflexElement>
