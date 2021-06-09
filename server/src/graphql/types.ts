@@ -38,6 +38,7 @@ export type Mutation = {
   login: UserResponse;
   register: UserResponse;
   updateFile?: Maybe<File>;
+  updatePlayground: Playground;
 };
 
 
@@ -66,6 +67,11 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateFileArgs = {
   data: UpdateFileInput;
+};
+
+
+export type MutationUpdatePlaygroundArgs = {
+  data: UpdatePlaygroundInput;
 };
 
 export type Playground = {
@@ -107,6 +113,11 @@ export type UpdateFileInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
+};
+
+export type UpdatePlaygroundInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -211,6 +222,7 @@ export type ResolversTypes = {
   Subscription: ResolverTypeWrapper<{}>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   UpdateFileInput: UpdateFileInput;
+  UpdatePlaygroundInput: UpdatePlaygroundInput;
   User: ResolverTypeWrapper<LeanIUserDoc>;
   UserResponse: ResolverTypeWrapper<Omit<UserResponse, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -228,6 +240,7 @@ export type ResolversParentTypes = {
   Subscription: {};
   Int: Scalars['Int'];
   UpdateFileInput: UpdateFileInput;
+  UpdatePlaygroundInput: UpdatePlaygroundInput;
   User: LeanIUserDoc;
   UserResponse: Omit<UserResponse, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   Boolean: Scalars['Boolean'];
@@ -252,6 +265,7 @@ export type MutationResolvers<ContextType = ApolloContext, ParentType extends Re
   login?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password'>>;
   updateFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUpdateFileArgs, 'data'>>;
+  updatePlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationUpdatePlaygroundArgs, 'data'>>;
 };
 
 export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Playground'] = ResolversParentTypes['Playground']> = {

@@ -22,3 +22,12 @@ export const GET_PLAYGROUND_QUERY = gql`
     }
   }
 `;
+
+export const UPDATE_PLAYGROUND_MUTATION = gql`
+  mutation ($data: UpdatePlaygroundInput!) {
+    updatePlayground(data: $data) {
+      name
+      id
+    }
+  }
+`;

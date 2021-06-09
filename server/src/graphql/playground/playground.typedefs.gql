@@ -8,8 +8,14 @@ type Query {
   getPlayground(id: ID!): Playground
 }
 
+input UpdatePlaygroundInput {
+  id: ID!
+  name: String
+}
+
 type Mutation {
   createPlayground(name: String!): Playground!
+  updatePlayground(data: UpdatePlaygroundInput!): Playground!
 }
 
 type Subscription {

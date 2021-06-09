@@ -1,4 +1,4 @@
-import { AuthError } from '@graphql/customErrors';
+import { AuthError, NotFoundByIdError } from '@graphql/customErrors';
 import { Resolvers } from '@graphql/types';
 import File from '@models/File';
 import Playground from '@models/Playground';
@@ -27,6 +27,17 @@ export const playgroundResolvers: Resolvers = {
       await createDefaultFiles(userId, playground._id);
 
       return playground;
+    },
+    updatePlayground: async (_, { data: { name, id } }, { userId }) => {
+      if (!userId) throw new AuthError();
+      const playground = await Playground.findOne({ _id: id, user: userId });
+      if (!playground) throw new NotFoundByIdError({ item: 'playground' });
+
+      if (name) {
+        playground.name = name;
+      }
+
+      return playground.save();
     },
   },
   Subscription: {

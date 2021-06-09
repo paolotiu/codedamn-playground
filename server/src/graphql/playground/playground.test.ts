@@ -1,5 +1,6 @@
 import {
   MutationCreatePlaygroundArgs,
+  MutationUpdatePlaygroundArgs,
   Playground as PlaygroundType,
   QueryGetPlaygroundArgs,
 } from '@graphql/types';
@@ -10,6 +11,7 @@ import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import {
   CREATE_PLAYGROUND_MUTATION,
   GET_PLAYGROUND_QUERY,
+  UPDATE_PLAYGROUND_MUTATION,
 } from '@testUtils/playground.operations';
 
 const { mutate, query, setOptions } = createApolloTestClient();
@@ -21,6 +23,11 @@ const createPlaygroundMutation = (variables: MutationCreatePlaygroundArgs) =>
 
 const getPlaygroundQuery = (variables: QueryGetPlaygroundArgs) =>
   query<{ getPlayground: PlaygroundType }>(GET_PLAYGROUND_QUERY, { variables });
+
+const updatePlaygroundMutation = (variables: MutationUpdatePlaygroundArgs) =>
+  mutate<{ updatePlayground: PlaygroundType }>(UPDATE_PLAYGROUND_MUTATION, {
+    variables,
+  });
 
 describe('Playground Operations', () => {
   const mockPlayground: Partial<PlaygroundType> = { name: 'Mock Plaground' };
@@ -65,5 +72,15 @@ describe('Playground Operations', () => {
     const { data } = await getPlaygroundQuery({ id: mockPlayground.id || '' });
 
     expect(data?.getPlayground).toMatchObject(mockPlayground);
+  });
+
+  it('Updates playground', async () => {
+    const UPDATED_NAME = 'updatedName';
+    await updatePlaygroundMutation({
+      data: { id: mockPlayground.id || '', name: UPDATED_NAME },
+    });
+
+    const playground = await Playground.findOne({ _id: mockPlayground.id });
+    expect(playground?.name).toEqual(UPDATED_NAME);
   });
 });
