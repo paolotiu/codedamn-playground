@@ -1,4 +1,4 @@
-import Editor from '@components/Editor';
+import Editor from '@components/Editor/Editor';
 import FileExplorer from '@components/FileExplorer/FileExplorer';
 import {
   useGetPlaygroundQuery,
@@ -7,7 +7,6 @@ import {
   UpdateFileMutationVariables,
 } from '@gql/generated';
 import { graphqlClient } from '@utils/graphqlClient';
-import { monacoSetup } from '@utils/monacoSetup';
 import React, { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
@@ -16,7 +15,12 @@ import 'xterm/css/xterm.css';
 import 'react-reflex/styles.css';
 import { useDebouncedCallback } from 'use-debounce';
 import { getFileType } from '@utils/getFileType';
+import EditorFilePicker from '@components/Editor/EditorFilePicker';
+import { useEditorFilePicker } from '@components/Editor/useEditorPicker';
+import EmptyEditor from '@components/Editor/EmptyEditor';
 
+// Load it in the client-side since the monaco instance needs the document object
+// Related: https://github.com/suren-atoyan/monaco-react#for-nextjs-users
 const Terminal = dynamic(() => import('@components/Terminal/Terminal'), { ssr: false });
 
 export type ChangeActiveFileFunc = (id: string) => void;
@@ -28,8 +32,15 @@ const Playground = ({ id: playgroundId }: Props) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const [files, setFiles] = useState<File[]>([]);
+  const {
+    addToEditorFilePicker,
+    filesInPicker,
+    removeFromEditorFilePicker,
+    activeFile,
+    getActiveIndex,
+    setActiveFile,
+  } = useEditorFilePicker();
 
-  const [activeFile, setActiveFile] = useState(files[0]);
   const updateFileMutation = useUpdateFileMutation(graphqlClient);
   const refreshIframe = () => {
     if (iframeRef.current?.src) {
@@ -52,9 +63,7 @@ const Playground = ({ id: playgroundId }: Props) => {
       onSuccess: (data) => {
         // Update state
         setFiles(data.getPlayground?.files || []);
-        if (data.getPlayground?.files?.length) {
-          setActiveFile(data.getPlayground.files[0]);
-        }
+
         refreshIframe();
       },
       retry: 0,
@@ -64,7 +73,7 @@ const Playground = ({ id: playgroundId }: Props) => {
   const changeActiveFile: ChangeActiveFileFunc = (id) => {
     const file = files.find((f) => f.id === id);
     if (file) {
-      setActiveFile(file);
+      addToEditorFilePicker(file);
     }
   };
   // useEffect(() => {
@@ -87,33 +96,31 @@ const Playground = ({ id: playgroundId }: Props) => {
   return (
     <div className="h-screen">
       <ReflexContainer orientation="vertical">
-        <ReflexElement className="left-pane" maxSize={300}>
+        <ReflexElement className="left-pane" maxSize={300} flex={0.2}>
           <FileExplorer files={files || []} onFileClick={(file) => changeActiveFile(file.id)} />
         </ReflexElement>
         <ReflexSplitter className="border-0 w-[4px] bg-off-black" />
-        <ReflexElement className="overflow-hidden right-pane" style={{ overflow: 'hidden' }}>
+        <ReflexElement className="">
           <ReflexContainer orientation="horizontal">
-            <ReflexElement>
-              <div className="h-full overflow-hidden pane-content">
-                {activeFile && (
+            <ReflexElement flex={1} minSize={100}>
+              <div className="flex flex-col h-full pane-content">
+                <EditorFilePicker
+                  activeIndex={getActiveIndex()}
+                  setActiveFile={setActiveFile}
+                  files={filesInPicker}
+                  removeFromPicker={removeFromEditorFilePicker}
+                />
+                {activeFile ? (
                   <Editor
-                    files={files}
                     value={activeFile.value}
                     language={getFileType(activeFile.name) || ''}
                     path={activeFile.name}
-                    theme="myTheme"
-                    options={{
-                      wordWrap: 'on',
-                      minimap: {
-                        enabled: false,
-                      },
-                      scrollBeyondLastLine: false,
-                    }}
-                    beforeMount={monacoSetup}
                     onChange={(value) => {
                       debouncedFileUpdate({ data: { id: activeFile.id, value } });
                     }}
                   />
+                ) : (
+                  <EmptyEditor />
                 )}
               </div>
             </ReflexElement>
@@ -124,15 +131,13 @@ const Playground = ({ id: playgroundId }: Props) => {
         <ReflexElement className="right-pane">
           <ReflexContainer orientation="horizontal">
             <ReflexElement className="right-pane ">
-              {activeFile && (
-                <iframe
-                  ref={iframeRef}
-                  title="Playground"
-                  className="w-full h-full pane-content"
-                  sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
-                  src={`http://localhost:4000/playground/${playgroundId}`}
-                ></iframe>
-              )}
+              <iframe
+                ref={iframeRef}
+                title="Playground"
+                className="w-full h-full pane-content"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
+                src={`http://localhost:4000/playground/${playgroundId}`}
+              ></iframe>
             </ReflexElement>
 
             <ReflexSplitter />
