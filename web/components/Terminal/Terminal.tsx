@@ -1,13 +1,11 @@
 import React, { useEffect, useRef } from 'react';
+import ResizeObserver from 'react-resize-observer';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 
 import 'xterm/css/xterm.css';
 
-interface Props {
-  dimensions?: { width: number; height: number };
-}
-const TerminalComponent = ({ dimensions }: Props) => {
+const TerminalComponent = () => {
   const termRef = useRef<HTMLDivElement>(null);
   const fitAddonRef = useRef<FitAddon>();
   useEffect(() => {
@@ -51,13 +49,16 @@ const TerminalComponent = ({ dimensions }: Props) => {
     };
   }, []);
 
-  // Resize whenever the dimensions changes
-  useEffect(() => {
-    fitAddonRef.current?.fit();
-  }, [dimensions]);
-
   return (
-    <div className="h-full pane-content">
+    <div className="h-full overflow-hidden pane-content">
+      {/* We're using a resize observer instead of the propagate dimensions prop of react reflex
+          beacuse the div that react reflex gives does not always fill the provided space. Sometimes it 
+          is off by 1-2px. Looks bad :( */}
+      <ResizeObserver
+        onResize={() => {
+          fitAddonRef.current?.fit();
+        }}
+      />
       <div ref={termRef} className="h-full" />
     </div>
   );
