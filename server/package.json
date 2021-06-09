@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsc && node ./dist",
+    "dev:server": "NODE_ENV=development nodemon --exec ts-node-transpile-only -r tsconfig-paths/register src/index.ts",
     "dev": "NODE_ENV=development concurrently \"nodemon --exec ts-node-transpile-only -r tsconfig-paths/register src/index.ts\" \"yarn generate --watch\"",
     "generate": "graphql-codegen --config codegen.yml",
     "test": "jest",
@@ -17,6 +18,7 @@
     "@types/mongoose-lean-virtuals": "^0.5.2",
     "apollo-server-express": "^2.21.1",
     "bcryptjs": "^2.4.3",
+    "connect-redis": "^6.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
@@ -24,13 +26,16 @@
     "graphql-tools": "^7.0.5",
     "mime-types": "^2.1.31",
     "mongoose": "^5.12.13",
-    "mongoose-lean-virtuals": "^0.8.0"
+    "mongoose-lean-virtuals": "^0.8.0",
+    "redis": "^3.1.2",
+    "socket.io": "^4.1.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "1.21.3",
     "@graphql-codegen/typescript": "1.21.1",
     "@graphql-codegen/typescript-resolvers": "1.19.0",
     "@types/bcryptjs": "^2.4.2",
+    "@types/connect-redis": "^0.0.16",
     "@types/express": "^4.17.12",
     "@types/jest": "^26.0.23",
     "@types/mime-types": "^2.1.0",

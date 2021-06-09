@@ -1,11 +1,16 @@
 import express from 'express';
 import session from 'express-session';
+import connectRedis from 'connect-redis';
+import redis from 'redis';
 import http from 'http';
 import 'dotenv/config';
 import { createApolloServer } from '@utils/createApolloServer';
 import { createMongooseConnection } from '@utils/createMongooseConnection';
 import File from '@models/File';
 import { isValidObjectId } from 'mongoose';
+
+const RedisStore = connectRedis(session);
+const redisClient = redis.createClient();
 
 const startApolloServer = async () => {
   const app = express();
@@ -20,6 +25,7 @@ const startApolloServer = async () => {
       resave: false,
       saveUninitialized: false,
       name: 'sid',
+      store: new RedisStore({ client: redisClient }),
       cookie: {
         httpOnly: true,
 
