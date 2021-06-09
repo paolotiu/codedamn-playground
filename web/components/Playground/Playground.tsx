@@ -114,8 +114,11 @@ const Playground = ({ id: playgroundId }: Props) => {
         </div>
       </div>
 
+      {/* Fixes overflow bug */}
       <ReflexContainer orientation="horizontal">
         <ReflexElement>
+          {/* ----------------- */}
+
           <ReflexContainer orientation="vertical">
             <ReflexElement className="left-pane" maxSize={300} flex={0.2}>
               <FileExplorer files={files || []} onFileClick={(file) => changeActiveFile(file.id)} />
