@@ -123,8 +123,8 @@ const Playground = ({ id: playgroundId }: Props) => {
                     />
                     {activeFile ? (
                       <Editor
-                        value={activeFile.value}
-                        language={getFileType(activeFile.name) || ''}
+                        defaultLanguage={getFileType(activeFile.name) || ''}
+                        defaultValue={activeFile.value}
                         path={activeFile.name}
                         onChange={(value) => {
                           debouncedFileUpdate({ data: { id: activeFile.id, value } });
