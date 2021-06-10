@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { LeanIUserDoc } from '../models/User';
 import { LeanIPlaygroundDoc } from '../models/Playground';
 import { LeanIFileDoc } from '../models/File';
@@ -16,7 +16,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Date: any;
 };
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -79,6 +81,8 @@ export type Playground = {
   name: Scalars['String'];
   files?: Maybe<Array<File>>;
   id: Scalars['ID'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 export type Query = {
@@ -212,6 +216,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Date: ResolverTypeWrapper<Scalars['Date']>;
   FieldError: ResolverTypeWrapper<FieldError>;
   String: ResolverTypeWrapper<Scalars['String']>;
   File: ResolverTypeWrapper<LeanIFileDoc>;
@@ -230,6 +235,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Date: Scalars['Date'];
   FieldError: FieldError;
   String: Scalars['String'];
   File: LeanIFileDoc;
@@ -245,6 +251,10 @@ export type ResolversParentTypes = {
   UserResponse: Omit<UserResponse, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   Boolean: Scalars['Boolean'];
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type FieldErrorResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['FieldError'] = ResolversParentTypes['FieldError']> = {
   path?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -272,6 +282,8 @@ export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends 
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   files?: Resolver<Maybe<Array<ResolversTypes['File']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -301,6 +313,7 @@ export type UserResponseResolvers<ContextType = ApolloContext, ParentType extend
 };
 
 export type Resolvers<ContextType = ApolloContext> = {
+  Date?: GraphQLScalarType;
   FieldError?: FieldErrorResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

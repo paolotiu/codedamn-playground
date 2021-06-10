@@ -5,6 +5,8 @@ import { InterfaceSchema } from './utilTypes';
 export interface IPlayground {
   name: string;
   user: ObjectId | string | IUserDoc;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface IPlaygroundDoc extends IPlayground, Document {
@@ -13,7 +15,10 @@ export interface IPlaygroundDoc extends IPlayground, Document {
 
 export interface LeanIPlaygroundDoc extends LeanDocument<IPlaygroundDoc> {}
 
-const PlaygroundSchemaFields: InterfaceSchema<IPlayground> = {
+const PlaygroundSchemaFields: Omit<
+  InterfaceSchema<IPlayground>,
+  'createdAt' | 'updatedAt'
+> = {
   name: {
     type: String,
     required: true,
@@ -25,6 +30,8 @@ const PlaygroundSchemaFields: InterfaceSchema<IPlayground> = {
   },
 };
 
-const PlaygroundSchema = new Schema<IPlaygroundDoc>(PlaygroundSchemaFields);
+const PlaygroundSchema = new Schema<IPlaygroundDoc>(PlaygroundSchemaFields, {
+  timestamps: true,
+});
 
 export default model<IPlaygroundDoc>('Playground', PlaygroundSchema);

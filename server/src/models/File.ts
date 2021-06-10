@@ -50,7 +50,7 @@ FileSchema.virtual('mimeType').get(function (this: IFileDoc) {
 // Enable the options to add virtuals in lean queries
 FileSchema.plugin(mongooseLeanVirtuals);
 
-// Create a compound index for name uniqueness per user
-FileSchema.index({ name: 1, user: 1 }, { unique: true });
+// Create a compound index for name uniqueness per user per playground
+FileSchema.index({ name: 1, user: 1, playground: 1 }, { unique: true });
 
 export default model<IFileDoc>('File', FileSchema);
