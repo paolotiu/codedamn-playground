@@ -1,4 +1,5 @@
 import { useUpdatePlaygroundMutation } from '@gql/generated';
+import { HiOutlineExternalLink } from 'react-icons/hi';
 import { graphqlClient } from '@utils/graphqlClient';
 import React, { useRef } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -47,8 +48,9 @@ const PlaygroundHeader = ({ playgroundId, playgroundName }: Props) => {
           href={`http://localhost:3000/playground/detached/${playgroundId}`}
           target="_blank"
           rel="noreferrer"
+          className="flex items-center"
         >
-          out
+          <HiOutlineExternalLink size="25px" />
         </a>
       </div>
     </div>

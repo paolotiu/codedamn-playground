@@ -18,6 +18,9 @@ const DetachedPage = () => {
       };
     }
   }, [bc, refreshIframe]);
+
+  if (!router.isReady) return null;
+
   return (
     <iframe
       ref={iframeRef}
