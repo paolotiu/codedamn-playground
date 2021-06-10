@@ -1,5 +1,6 @@
 import { AuthError, NotFoundByIdError } from '@graphql/customErrors';
 import File from '@models/File';
+import Playground from '@models/Playground';
 import { Resolvers } from '../types';
 
 export const fileResolvers: Resolvers = {
@@ -43,6 +44,11 @@ export const fileResolvers: Resolvers = {
       if (value) {
         file.value = value;
       }
+
+      await Playground.updateOne(
+        { _id: file.playground },
+        { updatedAt: new Date() }
+      );
 
       return file.save();
     },
