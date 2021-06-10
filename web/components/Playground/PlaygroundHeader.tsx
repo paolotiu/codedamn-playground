@@ -44,7 +44,7 @@ const PlaygroundHeader = ({ playgroundId, playgroundName }: Props) => {
       </div>
       <div>
         <a
-          href={`http://localhost:4000/playground/${playgroundId}`}
+          href={`http://localhost:3000/playground/detached/${playgroundId}`}
           target="_blank"
           rel="noreferrer"
         >

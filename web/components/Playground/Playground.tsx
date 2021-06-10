@@ -7,18 +7,20 @@ import {
   UpdateFileMutationVariables,
 } from '@gql/generated';
 import { graphqlClient } from '@utils/graphqlClient';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
-
-import 'xterm/css/xterm.css';
-import 'react-reflex/styles.css';
 import { useDebouncedCallback } from 'use-debounce';
 import { getFileType } from '@utils/getFileType';
 import EditorFilePicker from '@components/Editor/EditorFilePicker';
 import { useEditorFilePicker } from '@components/Editor/useEditorPicker';
 import EmptyEditor from '@components/Editor/EmptyEditor';
+import { useBroadcastChannel } from '@utils/useBroadcastChannel';
+import { useIframe } from '@utils/useIframe';
 import PlaygroundHeader from './PlaygroundHeader';
+
+import 'xterm/css/xterm.css';
+import 'react-reflex/styles.css';
 
 // Load it in the client-side since the monaco instance needs the document object
 // Related: https://github.com/suren-atoyan/monaco-react#for-nextjs-users
@@ -29,10 +31,12 @@ export type ChangeActiveFileFunc = (id: string) => void;
 interface Props {
   id: string;
 }
-const Playground = ({ id: playgroundId }: Props) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
+const Playground = ({ id: playgroundId }: Props) => {
+  const { iframeRef, refreshIframe } = useIframe();
   const [files, setFiles] = useState<File[]>([]);
+  const bc = useBroadcastChannel('playground');
+
   const {
     addToEditorFilePicker,
     filesInPicker,
@@ -42,16 +46,11 @@ const Playground = ({ id: playgroundId }: Props) => {
   } = useEditorFilePicker();
 
   const updateFileMutation = useUpdateFileMutation(graphqlClient);
-  const refreshIframe = () => {
-    if (iframeRef.current?.src) {
-      // eslint-disable-next-line no-self-assign
-      iframeRef.current.src = iframeRef.current.src;
-    }
-  };
 
   const debouncedFileUpdate = useDebouncedCallback(
     async (variables: UpdateFileMutationVariables) => {
       await updateFileMutation.mutateAsync(variables);
+      bc?.postMessage('update');
       refreshIframe();
     },
     1000,
