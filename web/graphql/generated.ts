@@ -39,6 +39,7 @@ export type Mutation = {
   updateFile?: Maybe<File>;
   createPlayground: Playground;
   updatePlayground: Playground;
+  deletePlayground: Playground;
   register: UserResponse;
   login: UserResponse;
 };
@@ -62,6 +63,11 @@ export type MutationCreatePlaygroundArgs = {
 
 export type MutationUpdatePlaygroundArgs = {
   data: UpdatePlaygroundInput;
+};
+
+
+export type MutationDeletePlaygroundArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -225,6 +231,19 @@ export type CreatePlaygroundMutationVariables = Exact<{
 export type CreatePlaygroundMutation = (
   { __typename?: 'Mutation' }
   & { createPlayground: (
+    { __typename?: 'Playground' }
+    & Pick<Playground, 'id'>
+  ) }
+);
+
+export type DeletePlaygroundMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeletePlaygroundMutation = (
+  { __typename?: 'Mutation' }
+  & { deletePlayground: (
     { __typename?: 'Playground' }
     & Pick<Playground, 'id'>
   ) }
@@ -395,6 +414,24 @@ export const useCreatePlaygroundMutation = <
     ) => 
     useMutation<CreatePlaygroundMutation, TError, CreatePlaygroundMutationVariables, TContext>(
       (variables?: CreatePlaygroundMutationVariables) => fetcher<CreatePlaygroundMutation, CreatePlaygroundMutationVariables>(client, CreatePlaygroundDocument, variables)(),
+      options
+    );
+export const DeletePlaygroundDocument = `
+    mutation deletePlayground($id: ID!) {
+  deletePlayground(id: $id) {
+    id
+  }
+}
+    `;
+export const useDeletePlaygroundMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<DeletePlaygroundMutation, TError, DeletePlaygroundMutationVariables, TContext>
+    ) => 
+    useMutation<DeletePlaygroundMutation, TError, DeletePlaygroundMutationVariables, TContext>(
+      (variables?: DeletePlaygroundMutationVariables) => fetcher<DeletePlaygroundMutation, DeletePlaygroundMutationVariables>(client, DeletePlaygroundDocument, variables)(),
       options
     );
 export const LoginDocument = `

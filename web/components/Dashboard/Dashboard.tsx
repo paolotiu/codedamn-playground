@@ -1,13 +1,26 @@
-import { useGetAllPlaygroundsQuery, useCreatePlaygroundMutation } from '@gql/generated';
+import {
+  useGetAllPlaygroundsQuery,
+  useCreatePlaygroundMutation,
+  useDeletePlaygroundMutation,
+} from '@gql/generated';
 import dayjs from 'dayjs';
 import { graphqlClient } from '@utils/graphqlClient';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React from 'react';
+import { FiTrash } from 'react-icons/fi';
+import { useQueryClient } from 'react-query';
 
 const Dashboard = () => {
   const playgroundsQuery = useGetAllPlaygroundsQuery(graphqlClient);
+  const queryClient = useQueryClient();
   const createPlaygroundMutation = useCreatePlaygroundMutation(graphqlClient);
+  const deletePlaygroundMutation = useDeletePlaygroundMutation(graphqlClient, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('getAllPlaygrounds');
+    },
+  });
+
   const router = useRouter();
   const handleCreatePlayground = async () => {
     const { createPlayground } = await createPlaygroundMutation.mutateAsync({
@@ -15,6 +28,7 @@ const Dashboard = () => {
     });
     router.push('http://localhost:3000/playground/' + createPlayground.id);
   };
+
   return (
     <section className="p-4">
       <div className="px-3 py-2">
@@ -23,8 +37,8 @@ const Dashboard = () => {
           <div className="w-full h-[2px] bg-gray-100"></div>
         </div>
         <div
-          className="grid gap-8 "
-          style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(200px, 300px))' }}
+          className="grid gap-8 pt-4 "
+          style={{ gridTemplateColumns: 'repeat(auto-fit,minmax(150px, 300px))' }}
         >
           <button
             type="button"
@@ -36,8 +50,18 @@ const Dashboard = () => {
           {playgroundsQuery.data?.me?.playgrounds.map((pg) => {
             return (
               <Link href={`/playground/${pg.id}`} key={pg.id}>
-                <div className="p-4 break-words border rounded cursor-pointer">
-                  <h3 className="text-2xl font-bold break-words">{pg.name}</h3>
+                <div className="relative p-4 break-words border rounded cursor-pointer group">
+                  <h3 className="pr-3 text-2xl font-bold break-words">{pg.name}</h3>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deletePlaygroundMutation.mutate({ id: pg.id });
+                    }}
+                    className="absolute hidden text-red-500 right-3 top-2 group-hover:block hover:scale-105 hover:transform"
+                  >
+                    <FiTrash />
+                  </button>
                   <div className="py-4">
                     <hr />
                   </div>

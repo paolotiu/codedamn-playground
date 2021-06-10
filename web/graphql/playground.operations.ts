@@ -41,3 +41,11 @@ export const CREATE_PLAYGROUND = gql`
     }
   }
 `;
+
+export const DELETE_PLAYGROUND = gql`
+  mutation deletePlayground($id: ID!) {
+    deletePlayground(id: $id) {
+      id
+    }
+  }
+`;
