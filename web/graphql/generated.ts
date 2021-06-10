@@ -15,7 +15,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** Date custom scalar type */
+  Date: any;
 };
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -35,6 +38,7 @@ export type Mutation = {
   createFile: File;
   updateFile?: Maybe<File>;
   createPlayground: Playground;
+  updatePlayground: Playground;
   register: UserResponse;
   login: UserResponse;
 };
@@ -56,6 +60,11 @@ export type MutationCreatePlaygroundArgs = {
 };
 
 
+export type MutationUpdatePlaygroundArgs = {
+  data: UpdatePlaygroundInput;
+};
+
+
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -72,6 +81,8 @@ export type Playground = {
   name: Scalars['String'];
   files?: Maybe<Array<File>>;
   id: Scalars['ID'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
 };
 
 export type Query = {
@@ -106,6 +117,11 @@ export type UpdateFileInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
+};
+
+export type UpdatePlaygroundInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -183,9 +199,35 @@ export type GetAllPlaygroundsQuery = (
     { __typename?: 'User' }
     & { playgrounds: Array<(
       { __typename?: 'Playground' }
-      & Pick<Playground, 'id' | 'name'>
+      & Pick<Playground, 'id' | 'name' | 'createdAt' | 'updatedAt'>
     )> }
   )> }
+);
+
+export type UpdatePlaygroundMutationVariables = Exact<{
+  data: UpdatePlaygroundInput;
+}>;
+
+
+export type UpdatePlaygroundMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePlayground: (
+    { __typename?: 'Playground' }
+    & Pick<Playground, 'id'>
+  ) }
+);
+
+export type CreatePlaygroundMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreatePlaygroundMutation = (
+  { __typename?: 'Mutation' }
+  & { createPlayground: (
+    { __typename?: 'Playground' }
+    & Pick<Playground, 'id'>
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -300,6 +342,8 @@ export const GetAllPlaygroundsDocument = `
     playgrounds {
       id
       name
+      createdAt
+      updatedAt
     }
   }
 }
@@ -315,6 +359,42 @@ export const useGetAllPlaygroundsQuery = <
     useQuery<GetAllPlaygroundsQuery, TError, TData>(
       ['getAllPlaygrounds', variables],
       fetcher<GetAllPlaygroundsQuery, GetAllPlaygroundsQueryVariables>(client, GetAllPlaygroundsDocument, variables),
+      options
+    );
+export const UpdatePlaygroundDocument = `
+    mutation updatePlayground($data: UpdatePlaygroundInput!) {
+  updatePlayground(data: $data) {
+    id
+  }
+}
+    `;
+export const useUpdatePlaygroundMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<UpdatePlaygroundMutation, TError, UpdatePlaygroundMutationVariables, TContext>
+    ) => 
+    useMutation<UpdatePlaygroundMutation, TError, UpdatePlaygroundMutationVariables, TContext>(
+      (variables?: UpdatePlaygroundMutationVariables) => fetcher<UpdatePlaygroundMutation, UpdatePlaygroundMutationVariables>(client, UpdatePlaygroundDocument, variables)(),
+      options
+    );
+export const CreatePlaygroundDocument = `
+    mutation createPlayground($name: String!) {
+  createPlayground(name: $name) {
+    id
+  }
+}
+    `;
+export const useCreatePlaygroundMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<CreatePlaygroundMutation, TError, CreatePlaygroundMutationVariables, TContext>
+    ) => 
+    useMutation<CreatePlaygroundMutation, TError, CreatePlaygroundMutationVariables, TContext>(
+      (variables?: CreatePlaygroundMutationVariables) => fetcher<CreatePlaygroundMutation, CreatePlaygroundMutationVariables>(client, CreatePlaygroundDocument, variables)(),
       options
     );
 export const LoginDocument = `

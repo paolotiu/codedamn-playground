@@ -1,6 +1,6 @@
-import Playground from '@components/Playground/Playground';
+import Dashboard from '@components/Dashboard/Dashboard';
 import React from 'react';
 
-const PlaygroundPage = () => <Playground />;
+const PlaygroundPage = () => <Dashboard />;
 
 export default PlaygroundPage;

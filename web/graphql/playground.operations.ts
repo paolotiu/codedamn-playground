@@ -19,7 +19,25 @@ export const GET_ALL_PLAYGROUNDS = gql`
       playgrounds {
         id
         name
+        createdAt
+        updatedAt
       }
+    }
+  }
+`;
+
+export const UPDATE_PLAYGROUND = gql`
+  mutation updatePlayground($data: UpdatePlaygroundInput!) {
+    updatePlayground(data: $data) {
+      id
+    }
+  }
+`;
+
+export const CREATE_PLAYGROUND = gql`
+  mutation createPlayground($name: String!) {
+    createPlayground(name: $name) {
+      id
     }
   }
 `;

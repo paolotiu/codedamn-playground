@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.1.3",
+    "dayjs": "^1.10.5",
     "emmet-monaco-es": "^4.6.2",
     "eslint-config-prettier": "^8.2.0",
     "graphql": "^15.5.0",
