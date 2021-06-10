@@ -1,5 +1,6 @@
 import {
   MutationCreatePlaygroundArgs,
+  MutationDeletePlaygroundArgs,
   MutationUpdatePlaygroundArgs,
   Playground as PlaygroundType,
   QueryGetPlaygroundArgs,
@@ -10,6 +11,7 @@ import User from '@models/User';
 import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import {
   CREATE_PLAYGROUND_MUTATION,
+  DELETE_PLAYGROUND_MUTATION,
   GET_PLAYGROUND_QUERY,
   UPDATE_PLAYGROUND_MUTATION,
 } from '@testUtils/playground.operations';
@@ -26,6 +28,11 @@ const getPlaygroundQuery = (variables: QueryGetPlaygroundArgs) =>
 
 const updatePlaygroundMutation = (variables: MutationUpdatePlaygroundArgs) =>
   mutate<{ updatePlayground: PlaygroundType }>(UPDATE_PLAYGROUND_MUTATION, {
+    variables,
+  });
+
+const deletePlaygroundMutation = (variables: MutationDeletePlaygroundArgs) =>
+  mutate<{ deletePlayground: PlaygroundType }>(DELETE_PLAYGROUND_MUTATION, {
     variables,
   });
 
@@ -82,5 +89,11 @@ describe('Playground Operations', () => {
 
     const playground = await Playground.findOne({ _id: mockPlayground.id });
     expect(playground?.name).toEqual(UPDATED_NAME);
+  });
+
+  it('Deletes playground', async () => {
+    await deletePlaygroundMutation({ id: mockPlayground.id || '' });
+    const playground = await Playground.findOne({ _id: mockPlayground.id });
+    expect(playground).toBeNull();
   });
 });

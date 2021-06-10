@@ -37,6 +37,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createFile: File;
   createPlayground: Playground;
+  deletePlayground: Playground;
   login: UserResponse;
   register: UserResponse;
   updateFile?: Maybe<File>;
@@ -52,6 +53,11 @@ export type MutationCreateFileArgs = {
 
 export type MutationCreatePlaygroundArgs = {
   name: Scalars['String'];
+};
+
+
+export type MutationDeletePlaygroundArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -272,6 +278,7 @@ export type FileResolvers<ContextType = ApolloContext, ParentType extends Resolv
 export type MutationResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationCreateFileArgs, 'name' | 'playgroundId'>>;
   createPlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationCreatePlaygroundArgs, 'name'>>;
+  deletePlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationDeletePlaygroundArgs, 'id'>>;
   login?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password'>>;
   updateFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUpdateFileArgs, 'data'>>;

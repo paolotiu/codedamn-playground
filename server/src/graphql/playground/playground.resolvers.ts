@@ -39,6 +39,14 @@ export const playgroundResolvers: Resolvers = {
 
       return playground.save();
     },
+    deletePlayground: async (_, { id }, { userId }) => {
+      if (!userId) throw new AuthError();
+      const playground = await Playground.findOne({ _id: id, user: userId });
+      if (!playground) throw new NotFoundByIdError({ item: 'playground' });
+
+      await playground.remove();
+      return playground;
+    },
   },
   Subscription: {
     playground: {

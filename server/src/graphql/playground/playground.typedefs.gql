@@ -18,6 +18,7 @@ input UpdatePlaygroundInput {
 type Mutation {
   createPlayground(name: String!): Playground!
   updatePlayground(data: UpdatePlaygroundInput!): Playground!
+  deletePlayground(id: ID!): Playground!
 }
 
 type Subscription {

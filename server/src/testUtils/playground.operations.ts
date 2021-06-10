@@ -31,3 +31,11 @@ export const UPDATE_PLAYGROUND_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_PLAYGROUND_MUTATION = gql`
+  mutation ($id: ID!) {
+    deletePlayground(id: $id) {
+      id
+    }
+  }
+`;
