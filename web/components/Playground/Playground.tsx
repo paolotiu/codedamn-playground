@@ -18,6 +18,7 @@ import { getFileType } from '@utils/getFileType';
 import EditorFilePicker from '@components/Editor/EditorFilePicker';
 import { useEditorFilePicker } from '@components/Editor/useEditorPicker';
 import EmptyEditor from '@components/Editor/EmptyEditor';
+import PlaygroundHeader from './PlaygroundHeader';
 
 // Load it in the client-side since the monaco instance needs the document object
 // Related: https://github.com/suren-atoyan/monaco-react#for-nextjs-users
@@ -38,7 +39,6 @@ const Playground = ({ id: playgroundId }: Props) => {
     removeFromEditorFilePicker,
     activeFile,
     getActiveIndex,
-    setActiveFile,
   } = useEditorFilePicker();
 
   const updateFileMutation = useUpdateFileMutation(graphqlClient);
@@ -48,6 +48,7 @@ const Playground = ({ id: playgroundId }: Props) => {
       iframeRef.current.src = iframeRef.current.src;
     }
   };
+
   const debouncedFileUpdate = useDebouncedCallback(
     async (variables: UpdateFileMutationVariables) => {
       await updateFileMutation.mutateAsync(variables);
@@ -95,24 +96,10 @@ const Playground = ({ id: playgroundId }: Props) => {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex justify-between px-6 py-3 font-bold text-white bg-black border-b border-off-black ">
-        <div>
-          <input
-            type="text"
-            value={playgroundQuery.data?.getPlayground?.name}
-            className="text-xl font-bold bg-transparent outline-none focus-visible:shadow-border-b-white"
-          />
-        </div>
-        <div>
-          <a
-            href={`http://localhost:4000/playground/${playgroundId}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            out
-          </a>
-        </div>
-      </div>
+      <PlaygroundHeader
+        playgroundId={playgroundId}
+        playgroundName={playgroundQuery.data?.getPlayground?.name || ''}
+      />
 
       {/* Fixes overflow bug */}
       <ReflexContainer orientation="horizontal">
@@ -130,7 +117,7 @@ const Playground = ({ id: playgroundId }: Props) => {
                   <div className="flex flex-col h-full pane-content">
                     <EditorFilePicker
                       activeIndex={getActiveIndex()}
-                      setActiveFile={setActiveFile}
+                      changeActiveFile={(file) => changeActiveFile(file.id)}
                       files={filesInPicker}
                       removeFromPicker={removeFromEditorFilePicker}
                     />

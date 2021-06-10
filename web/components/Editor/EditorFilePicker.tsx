@@ -35,17 +35,17 @@ interface Props {
   files: File[];
   activeIndex: number;
   removeFromPicker: (file: File) => void;
-  setActiveFile: (file: File) => void;
+  changeActiveFile: (file: File) => void;
 }
 
-const EditorFilePicker = ({ files, removeFromPicker, setActiveFile, activeIndex }: Props) => {
+const EditorFilePicker = ({ files, removeFromPicker, changeActiveFile, activeIndex }: Props) => {
   return (
     <div className="flex px-4 pt-2 pb-4 min-h-[44px] text-white bg-black">
       {files.map((file, index) => (
         <EditorPickerItem
           isActive={activeIndex === index}
           label={file.name}
-          onClick={() => setActiveFile(file)}
+          onClick={() => changeActiveFile(file)}
           handleDelete={() => removeFromPicker(file)}
           key={file.id}
         />
