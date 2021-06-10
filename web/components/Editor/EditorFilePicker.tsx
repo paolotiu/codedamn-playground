@@ -11,12 +11,19 @@ interface EditorPickerItemProps {
 }
 const EditorPickerItem = ({ label, handleDelete, onClick, isActive }: EditorPickerItemProps) => {
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       className={`flex items-center px-2 py-3 space-x-2 hover:pr-2 focus:outline-none group  ${
         isActive && 'shadow-border-b-gray-500'
       }`}
       onClick={onClick}
+      // For screen readers
+      onKeyPress={(e) => {
+        if (e.key === 'Enter') {
+          onClick();
+        }
+      }}
     >
       <FileIcon name={label} size=".85em" />
       <span className="text-sm text-gray-200">{label}</span>
@@ -27,7 +34,7 @@ const EditorPickerItem = ({ label, handleDelete, onClick, isActive }: EditorPick
       >
         <FiX size=".9em" />
       </button>
-    </button>
+    </div>
   );
 };
 
