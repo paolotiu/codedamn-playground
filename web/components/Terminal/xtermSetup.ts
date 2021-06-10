@@ -34,12 +34,27 @@ export const xtermSetup = () => {
     if (e.key === 'Enter') {
       const { allButFirst, firstArg } = getArgs(cmd);
 
-      console.log(firstArg, allButFirst);
-      if (firstArg === 'echo') {
-        term.write('\r\n' + allButFirst);
+      if (firstArg) {
+        switch (firstArg) {
+          case 'echo':
+            term.write('\r\n' + allButFirst);
+            break;
+          case 'ls':
+            term.write('\r\n index.html script.js style.css');
+            break;
+          case 'clear':
+            term.clear();
+
+            break;
+
+          default:
+            term.write("\r\n Sorry, I don't recognize that command");
+            break;
+        }
       }
 
       termPrompt();
+
       cmd = '';
     } else if (e.key === 'Backspace') {
       // Prevent the deletion of prompt
