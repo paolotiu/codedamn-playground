@@ -35,8 +35,16 @@ const getFileQuery = (variables: QueryGetFileArgs) =>
 const updateFileMutation = (variables: MutationUpdateFileArgs) =>
   mutate<{ updateFile: File }>(UPDATE_FILE_MUTATION, { variables });
 
+// ------------------------------------
+// --------- Start of tests -----------
+// ------------------------------------
+
 describe('File operations', () => {
-  const mockUser = { email: 'file@test.com', password: 'testPassword', name: 'file' };
+  const mockUser = {
+    email: 'file@test.com',
+    password: 'testPassword',
+    name: 'file',
+  };
   let userId: string;
 
   it('Login user', async () => {

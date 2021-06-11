@@ -7,7 +7,6 @@ import {
 } from '@graphql/types';
 import File from '@models/File';
 import Playground from '@models/Playground';
-import User from '@models/User';
 import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import { createUser } from '@testUtils/createUser';
 import {
@@ -36,6 +35,10 @@ const deletePlaygroundMutation = (variables: MutationDeletePlaygroundArgs) =>
   mutate<{ deletePlayground: PlaygroundType }>(DELETE_PLAYGROUND_MUTATION, {
     variables,
   });
+
+// ------------------------------------
+// --------- Start of tests -----------
+// ------------------------------------
 
 describe('Playground Operations', () => {
   const mockPlayground: Partial<PlaygroundType> = { name: 'Mock Plaground' };
