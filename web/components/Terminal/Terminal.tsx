@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ResizeObserver from 'react-resize-observer';
 
 import 'xterm/css/xterm.css';
@@ -8,7 +8,9 @@ const { term, fitAddon, termPrompt } = xtermSetup();
 
 const TerminalComponent = () => {
   const termRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
+    setIsMounted(true);
     if (termRef.current) {
       term.open(termRef.current);
       term.write('Hello, try the "echo" command :)');
@@ -29,7 +31,9 @@ const TerminalComponent = () => {
           is off by 1-2px. Looks bad :( */}
       <ResizeObserver
         onResize={() => {
-          fitAddon.fit();
+          if (isMounted) {
+            fitAddon.fit();
+          }
         }}
       />
       <div ref={termRef} className="h-full" />
