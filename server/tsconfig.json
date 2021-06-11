@@ -32,5 +32,9 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src/**/*", "jest.globalSetup.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "files": true
+  },
+  "files": ["src/@types/express.d.ts", "src/@types/global.d.ts"]
 }

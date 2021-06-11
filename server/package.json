@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "tsc && node ./dist",
+    "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "dev:server": "NODE_ENV=development nodemon --exec ts-node-transpile-only -r tsconfig-paths/register src/index.ts",
     "dev": "NODE_ENV=development concurrently \"nodemon --exec ts-node-transpile-only -r tsconfig-paths/register src/index.ts\" \"yarn generate --watch\"",
     "generate": "graphql-codegen --config codegen.yml",
