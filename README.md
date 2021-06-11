@@ -32,7 +32,7 @@ Next, confirm tests are passing for the server
  ## Configuring .env files
  
  Each folder will have their own .env.example files that you can should fill up.
- The pre-filled ones should be okay, except for the MONGO_URL. 
+ The pre-filled ones should be okay, except for the `DB_URL`. 
  For that you need to put your own mongodb atlas url.
  
  
