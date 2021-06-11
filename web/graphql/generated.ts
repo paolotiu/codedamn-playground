@@ -42,6 +42,7 @@ export type Mutation = {
   deletePlayground: Playground;
   register: UserResponse;
   login: UserResponse;
+  logout: Scalars['Boolean'];
 };
 
 
@@ -282,6 +283,14 @@ export type GetUserQuery = (
   )> }
 );
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
+);
+
 
 export const FilesDocument = `
     query files {
@@ -490,5 +499,21 @@ export const useGetUserQuery = <
     useQuery<GetUserQuery, TError, TData>(
       ['getUser', variables],
       fetcher<GetUserQuery, GetUserQueryVariables>(client, GetUserDocument, variables),
+      options
+    );
+export const LogoutDocument = `
+    mutation logout {
+  logout
+}
+    `;
+export const useLogoutMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<LogoutMutation, TError, LogoutMutationVariables, TContext>
+    ) => 
+    useMutation<LogoutMutation, TError, LogoutMutationVariables, TContext>(
+      (variables?: LogoutMutationVariables) => fetcher<LogoutMutation, LogoutMutationVariables>(client, LogoutDocument, variables)(),
       options
     );

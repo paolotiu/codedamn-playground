@@ -6,6 +6,9 @@ const invalidLogin = {
   errors: [{ path: 'login', message: 'The email or password is incorrect' }],
 };
 export const userResolvers: Resolvers = {
+  User: {
+    id: (parent) => parent._id.toString(),
+  },
   Query: {
     me: async (_, __, { userId }) => {
       const user = await User.findById(userId).lean();
@@ -53,6 +56,19 @@ export const userResolvers: Resolvers = {
       req.session.userId = user.id;
 
       return { user };
+    },
+    logout: async (_, __, { req, res }) => {
+      return new Promise((resolve, reject) =>
+        req.session.destroy((err) => {
+          if (err) {
+            console.log(err);
+            return reject(false);
+          }
+
+          res.clearCookie('sid');
+          return resolve(true);
+        })
+      );
     },
   },
 };

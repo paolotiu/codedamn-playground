@@ -1,10 +1,16 @@
-import { MutationLoginArgs } from '@graphql/types';
+import {
+  MutationLoginArgs,
+  MutationRegisterArgs,
+  User as UserType,
+} from '@graphql/types';
 import User from '@models/User';
 import { createApolloTestClient } from '@testUtils/createApolloTestClient';
 import { LOGIN_MUTATION, REGISTER_MUTATION } from '@testUtils/user.operations';
 
 const { mutate } = createApolloTestClient();
 
+const registerMutation = (variables: MutationRegisterArgs) =>
+  mutate<{ register: { user: UserType } }>(REGISTER_MUTATION, { variables });
 const loginMutation = (variables: MutationLoginArgs) =>
   mutate<{ login: { user: { email: string } | null; errors: any[] } }>(
     LOGIN_MUTATION,
@@ -23,9 +29,7 @@ describe('Auth flow', () => {
   };
 
   it('Registers user', async () => {
-    await mutate(REGISTER_MUTATION, {
-      variables: mockUser,
-    });
+    await registerMutation(mockUser);
 
     const user = await User.findOne({ email: mockUser.email }).lean();
     expect(user).not.toBeNull();

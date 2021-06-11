@@ -50,6 +50,7 @@ export type Mutation = {
   createPlayground: Playground;
   deletePlayground: Playground;
   login: UserResponse;
+  logout: Scalars['Boolean'];
   register: UserResponse;
   updateFile?: Maybe<File>;
   updatePlayground: Playground;
@@ -229,6 +230,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Playground: ResolverTypeWrapper<LeanIPlaygroundDoc>;
   UpdatePlaygroundInput: UpdatePlaygroundInput;
   UpdateFileInput: UpdateFileInput;
@@ -238,7 +240,6 @@ export type ResolversTypes = {
   FieldError: ResolverTypeWrapper<FieldError>;
   Subscription: ResolverTypeWrapper<{}>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -248,6 +249,7 @@ export type ResolversParentTypes = {
   String: Scalars['String'];
   Query: {};
   Mutation: {};
+  Boolean: Scalars['Boolean'];
   Playground: LeanIPlaygroundDoc;
   UpdatePlaygroundInput: UpdatePlaygroundInput;
   UpdateFileInput: UpdateFileInput;
@@ -257,7 +259,6 @@ export type ResolversParentTypes = {
   FieldError: FieldError;
   Subscription: {};
   Int: Scalars['Int'];
-  Boolean: Scalars['Boolean'];
 };
 
 export type FileResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
@@ -279,6 +280,7 @@ export type MutationResolvers<ContextType = ApolloContext, ParentType extends Re
   createPlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationCreatePlaygroundArgs, 'name'>>;
   deletePlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationDeletePlaygroundArgs, 'id'>>;
   login?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  logout?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>;
   updateFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUpdateFileArgs, 'data'>>;
   updatePlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationUpdatePlaygroundArgs, 'data'>>;
