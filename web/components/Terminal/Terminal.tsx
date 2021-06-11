@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import ResizeObserver from 'react-resize-observer';
+import { FitAddon } from 'xterm-addon-fit';
 
 import 'xterm/css/xterm.css';
 import { xtermSetup } from './xtermSetup';
 
-const { term, fitAddon, termPrompt } = xtermSetup();
-
 const TerminalComponent = () => {
   const termRef = useRef<HTMLDivElement>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const fitAddonRef = useRef<FitAddon | null>(null);
+
   useEffect(() => {
-    setIsMounted(true);
+    const { term, fitAddon, termPrompt } = xtermSetup();
+    fitAddonRef.current = fitAddon;
     if (termRef.current) {
       term.open(termRef.current);
       term.write('Hello, try the "echo" command :)');
@@ -31,9 +32,7 @@ const TerminalComponent = () => {
           is off by 1-2px. Looks bad :( */}
       <ResizeObserver
         onResize={() => {
-          if (isMounted) {
-            fitAddon.fit();
-          }
+          fitAddonRef.current?.fit();
         }}
       />
       <div ref={termRef} className="h-full" />

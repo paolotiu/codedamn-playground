@@ -13,6 +13,7 @@ const getArgs = (cmd: string) => {
 };
 
 export const xtermSetup = () => {
+  let cmd = '';
   const term = new Terminal({
     theme: {
       background: '#181818',
@@ -29,7 +30,6 @@ export const xtermSetup = () => {
     term.write('\r\n$ ');
   };
 
-  let cmd = '';
   term.onKey(({ key, domEvent: e }) => {
     if (e.key === 'Enter') {
       const { allButFirst, firstArg } = getArgs(cmd);
