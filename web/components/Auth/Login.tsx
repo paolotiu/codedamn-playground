@@ -2,6 +2,7 @@ import ErrorMessage from '@components/Form/ErrorMessage';
 import Input from '@components/Form/Input';
 import { graphqlClient } from '@utils/graphqlClient';
 import { useLoginMutation } from 'graphql/generated';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -17,13 +18,17 @@ const Auth = () => {
     setError,
   } = useForm<FormValues>();
   const loginMutation = useLoginMutation(graphqlClient, {});
+  const router = useRouter();
 
   const onSubmit = async (data: FormValues) => {
     loginMutation.mutate(data);
     if (loginMutation.data?.login.errors) {
       // Set the error given from server
       setError('email', { message: loginMutation.data.login.errors[0]?.message, type: 'manual' });
+      return;
     }
+
+    router.push('/dashboard');
   };
   return (
     <div className="flex justify-center pt-[50px]">
