@@ -12,12 +12,14 @@ import dynamic from 'next/dynamic';
 import { ReflexContainer, ReflexElement, ReflexSplitter } from 'react-reflex';
 import { useDebouncedCallback } from 'use-debounce';
 import { getFileType } from '@utils/getFileType';
+import Layout from '@components/Layout';
 import EditorFilePicker from '@components/Editor/EditorFilePicker';
 import { useEditorFilePicker } from '@components/Editor/useEditorPicker';
 import EmptyEditor from '@components/Editor/EmptyEditor';
 import { useBroadcastChannel } from '@utils/useBroadcastChannel';
 import { useIframe } from '@utils/useIframe';
 import PlaygroundHeader from './PlaygroundHeader';
+
 
 import 'xterm/css/xterm.css';
 import 'react-reflex/styles.css';
@@ -90,78 +92,82 @@ const Playground = ({ id: playgroundId }: Props) => {
   //   };
   // }, []);
 
-  if (playgroundQuery.isLoading) return null;
+  if (playgroundQuery.isLoading || !playgroundQuery.isSuccess) return null;
   if (playgroundQuery.isError) return <p>Not found</p>;
 
+  const { getPlayground } = playgroundQuery.data;
+
   return (
-    <div className="flex flex-col h-screen">
-      <PlaygroundHeader
-        playgroundId={playgroundId}
-        playgroundName={playgroundQuery.data?.getPlayground?.name || ''}
-      />
+    <Layout title={getPlayground?.name}>
+      <div className="flex flex-col h-screen">
+        <PlaygroundHeader playgroundId={playgroundId} playgroundName={getPlayground?.name || ''} />
 
-      {/* Fixes overflow bug */}
-      <ReflexContainer orientation="horizontal">
-        <ReflexElement>
-          {/* ----------------- */}
+        {/* Fixes overflow bug */}
+        <ReflexContainer orientation="horizontal">
+          <ReflexElement>
+            {/* ----------------- */}
 
-          <ReflexContainer orientation="vertical">
-            <ReflexElement className="left-pane" maxSize={300} flex={0.2}>
-              <FileExplorer files={files || []} onFileClick={(file) => changeActiveFile(file.id)} />
-            </ReflexElement>
-            <ReflexSplitter className="border-0 w-[4px] bg-off-black" />
-            <ReflexElement className="">
-              <ReflexContainer orientation="horizontal">
-                <ReflexElement>
-                  <div className="flex flex-col h-full pane-content">
-                    <EditorFilePicker
-                      activeIndex={getActiveIndex()}
-                      changeActiveFile={(file) => changeActiveFile(file.id)}
-                      files={filesInPicker}
-                      removeFromPicker={removeFromEditorFilePicker}
-                    />
-                    {activeFile ? (
-                      <Editor
-                        defaultLanguage={getFileType(activeFile.name) || ''}
-                        defaultValue={activeFile.value}
-                        path={activeFile.name}
-                        onChange={(value) => {
-                          debouncedFileUpdate({ data: { id: activeFile.id, value } });
-                        }}
+            <ReflexContainer orientation="vertical">
+              <ReflexElement className="left-pane" maxSize={300} flex={0.2}>
+                <FileExplorer
+                  files={files || []}
+                  onFileClick={(file) => changeActiveFile(file.id)}
+                />
+              </ReflexElement>
+              <ReflexSplitter className="border-0 w-[4px] bg-off-black" />
+              <ReflexElement className="">
+                <ReflexContainer orientation="horizontal">
+                  <ReflexElement>
+                    <div className="flex flex-col h-full pane-content">
+                      <EditorFilePicker
+                        activeIndex={getActiveIndex()}
+                        changeActiveFile={(file) => changeActiveFile(file.id)}
+                        files={filesInPicker}
+                        removeFromPicker={removeFromEditorFilePicker}
                       />
-                    ) : (
-                      <EmptyEditor />
-                    )}
-                  </div>
-                </ReflexElement>
-              </ReflexContainer>
-            </ReflexElement>
+                      {activeFile ? (
+                        <Editor
+                          defaultLanguage={getFileType(activeFile.name) || ''}
+                          defaultValue={activeFile.value}
+                          path={activeFile.name}
+                          onChange={(value) => {
+                            debouncedFileUpdate({ data: { id: activeFile.id, value } });
+                          }}
+                        />
+                      ) : (
+                        <EmptyEditor />
+                      )}
+                    </div>
+                  </ReflexElement>
+                </ReflexContainer>
+              </ReflexElement>
 
-            <ReflexSplitter />
+              <ReflexSplitter />
 
-            <ReflexElement className="right-pane">
-              <ReflexContainer orientation="horizontal">
-                <ReflexElement className="right-pane ">
-                  <iframe
-                    ref={iframeRef}
-                    title="Playground"
-                    className="w-full h-full pane-content"
-                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
-                    src={`http://localhost:4000/playground/${playgroundId}`}
-                  ></iframe>
-                </ReflexElement>
+              <ReflexElement className="right-pane">
+                <ReflexContainer orientation="horizontal">
+                  <ReflexElement className="right-pane ">
+                    <iframe
+                      ref={iframeRef}
+                      title="Playground"
+                      className="w-full h-full pane-content"
+                      sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
+                      src={`http://localhost:4000/playground/${playgroundId}`}
+                    ></iframe>
+                  </ReflexElement>
 
-                <ReflexSplitter />
+                  <ReflexSplitter />
 
-                <ReflexElement flex={0.35}>
-                  <Terminal />
-                </ReflexElement>
-              </ReflexContainer>
-            </ReflexElement>
-          </ReflexContainer>
-        </ReflexElement>
-      </ReflexContainer>
-    </div>
+                  <ReflexElement flex={0.35}>
+                    <Terminal />
+                  </ReflexElement>
+                </ReflexContainer>
+              </ReflexElement>
+            </ReflexContainer>
+          </ReflexElement>
+        </ReflexContainer>
+      </div>
+    </Layout>
   );
 };
 
