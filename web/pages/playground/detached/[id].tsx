@@ -24,7 +24,7 @@ const DetachedPage = () => {
   return (
     <iframe
       ref={iframeRef}
-      src={'http://localhost:4000/playground/' + id}
+      src={`${process.env.NEXT_PUBLIC_SERVER_URL}/playground/` + id}
       title="Playground"
       className="w-screen h-screen"
     >
