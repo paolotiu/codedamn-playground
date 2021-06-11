@@ -12,7 +12,7 @@ const loginMutation = (variables: MutationLoginArgs) =>
   );
 
 describe('Auth flow', () => {
-  const mockUser = { email: 'user@test.com', password: 'testPassword' };
+  const mockUser = { email: 'user@test.com', password: 'testPassword', name: 'testUser' };
   it('Registers user', async () => {
     await mutate(REGISTER_MUTATION, {
       variables: mockUser,

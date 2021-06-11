@@ -9,6 +9,7 @@ import File from '@models/File';
 import Playground from '@models/Playground';
 import User from '@models/User';
 import { createApolloTestClient } from '@testUtils/createApolloTestClient';
+import { createUser } from '@testUtils/createUser';
 import {
   CREATE_PLAYGROUND_MUTATION,
   DELETE_PLAYGROUND_MUTATION,
@@ -40,10 +41,7 @@ describe('Playground Operations', () => {
   const mockPlayground: Partial<PlaygroundType> = { name: 'Mock Plaground' };
   let userId: string;
   it('Creates playground', async () => {
-    const user = await new User({
-      email: 'playground@test.com',
-      password: 'testPassword',
-    }).save();
+    const user = await createUser('playground');
     userId = user.id;
 
     setOptions({ request: { session: { userId } } });

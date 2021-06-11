@@ -1,12 +1,12 @@
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { LeanIUserDoc } from '../models/User';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { LeanIPlaygroundDoc } from '../models/Playground';
 import { LeanIFileDoc } from '../models/File';
 import { ApolloContext } from './contextType';
-export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Maybe<T> = T | null;
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -19,18 +19,29 @@ export type Scalars = {
   Date: any;
 };
 
-
-export type FieldError = {
-  __typename?: 'FieldError';
-  path: Scalars['String'];
-  message: Scalars['String'];
-};
-
 export type File = {
   __typename?: 'File';
   id: Scalars['ID'];
   name: Scalars['String'];
   value: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  getFile?: Maybe<File>;
+  getPlayground?: Maybe<Playground>;
+  me?: Maybe<User>;
+  ping: Scalars['String'];
+};
+
+
+export type QueryGetFileArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryGetPlaygroundArgs = {
+  id: Scalars['ID'];
 };
 
 export type Mutation = {
@@ -70,6 +81,7 @@ export type MutationLoginArgs = {
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+  name: Scalars['String'];
 };
 
 
@@ -91,22 +103,37 @@ export type Playground = {
   updatedAt: Scalars['Date'];
 };
 
-export type Query = {
-  __typename?: 'Query';
-  getFile?: Maybe<File>;
-  getPlayground?: Maybe<Playground>;
-  me?: Maybe<User>;
-  ping: Scalars['String'];
+export type UpdatePlaygroundInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type UpdateFileInput = {
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 
-export type QueryGetFileArgs = {
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String'];
+  files: Array<File>;
+  playgrounds: Array<Playground>;
+  name: Scalars['String'];
   id: Scalars['ID'];
 };
 
+export type UserResponse = {
+  __typename?: 'UserResponse';
+  user?: Maybe<User>;
+  errors?: Maybe<Array<Maybe<FieldError>>>;
+};
 
-export type QueryGetPlaygroundArgs = {
-  id: Scalars['ID'];
+export type FieldError = {
+  __typename?: 'FieldError';
+  path: Scalars['String'];
+  message: Scalars['String'];
 };
 
 export type Subscription = {
@@ -117,31 +144,6 @@ export type Subscription = {
 
 export type SubscriptionPlaygroundArgs = {
   id: Scalars['ID'];
-};
-
-export type UpdateFileInput = {
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type UpdatePlaygroundInput = {
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
-};
-
-export type User = {
-  __typename?: 'User';
-  email: Scalars['String'];
-  files: Array<File>;
-  playgrounds: Array<Playground>;
-  id: Scalars['ID'];
-};
-
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  user?: Maybe<User>;
-  errors?: Maybe<Array<Maybe<FieldError>>>;
 };
 
 
@@ -222,50 +224,40 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Date: ResolverTypeWrapper<Scalars['Date']>;
-  FieldError: ResolverTypeWrapper<FieldError>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   File: ResolverTypeWrapper<LeanIFileDoc>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  Query: ResolverTypeWrapper<{}>;
   Mutation: ResolverTypeWrapper<{}>;
   Playground: ResolverTypeWrapper<LeanIPlaygroundDoc>;
-  Query: ResolverTypeWrapper<{}>;
-  Subscription: ResolverTypeWrapper<{}>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  UpdateFileInput: UpdateFileInput;
   UpdatePlaygroundInput: UpdatePlaygroundInput;
+  UpdateFileInput: UpdateFileInput;
+  Date: ResolverTypeWrapper<Scalars['Date']>;
   User: ResolverTypeWrapper<LeanIUserDoc>;
   UserResponse: ResolverTypeWrapper<Omit<UserResponse, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
+  FieldError: ResolverTypeWrapper<FieldError>;
+  Subscription: ResolverTypeWrapper<{}>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Date: Scalars['Date'];
-  FieldError: FieldError;
-  String: Scalars['String'];
   File: LeanIFileDoc;
   ID: Scalars['ID'];
+  String: Scalars['String'];
+  Query: {};
   Mutation: {};
   Playground: LeanIPlaygroundDoc;
-  Query: {};
-  Subscription: {};
-  Int: Scalars['Int'];
-  UpdateFileInput: UpdateFileInput;
   UpdatePlaygroundInput: UpdatePlaygroundInput;
+  UpdateFileInput: UpdateFileInput;
+  Date: Scalars['Date'];
   User: LeanIUserDoc;
   UserResponse: Omit<UserResponse, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
+  FieldError: FieldError;
+  Subscription: {};
+  Int: Scalars['Int'];
   Boolean: Scalars['Boolean'];
-};
-
-export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
-  name: 'Date';
-}
-
-export type FieldErrorResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['FieldError'] = ResolversParentTypes['FieldError']> = {
-  path?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type FileResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
@@ -275,12 +267,19 @@ export type FileResolvers<ContextType = ApolloContext, ParentType extends Resolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileArgs, 'id'>>;
+  getPlayground?: Resolver<Maybe<ResolversTypes['Playground']>, ParentType, ContextType, RequireFields<QueryGetPlaygroundArgs, 'id'>>;
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createFile?: Resolver<ResolversTypes['File'], ParentType, ContextType, RequireFields<MutationCreateFileArgs, 'name' | 'playgroundId'>>;
   createPlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationCreatePlaygroundArgs, 'name'>>;
   deletePlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationDeletePlaygroundArgs, 'id'>>;
   login?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password'>>;
+  register?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationRegisterArgs, 'email' | 'password' | 'name'>>;
   updateFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<MutationUpdateFileArgs, 'data'>>;
   updatePlayground?: Resolver<ResolversTypes['Playground'], ParentType, ContextType, RequireFields<MutationUpdatePlaygroundArgs, 'data'>>;
 };
@@ -294,21 +293,15 @@ export type PlaygroundResolvers<ContextType = ApolloContext, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type QueryResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getFile?: Resolver<Maybe<ResolversTypes['File']>, ParentType, ContextType, RequireFields<QueryGetFileArgs, 'id'>>;
-  getPlayground?: Resolver<Maybe<ResolversTypes['Playground']>, ParentType, ContextType, RequireFields<QueryGetPlaygroundArgs, 'id'>>;
-  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
-  ping?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-};
-
-export type SubscriptionResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
-  playground?: SubscriptionResolver<Maybe<ResolversTypes['Int']>, "playground", ParentType, ContextType, RequireFields<SubscriptionPlaygroundArgs, 'id'>>;
-};
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type UserResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   files?: Resolver<Array<ResolversTypes['File']>, ParentType, ContextType>;
   playgrounds?: Resolver<Array<ResolversTypes['Playground']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -319,16 +312,26 @@ export type UserResponseResolvers<ContextType = ApolloContext, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FieldErrorResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['FieldError'] = ResolversParentTypes['FieldError']> = {
+  path?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SubscriptionResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  playground?: SubscriptionResolver<Maybe<ResolversTypes['Int']>, "playground", ParentType, ContextType, RequireFields<SubscriptionPlaygroundArgs, 'id'>>;
+};
+
 export type Resolvers<ContextType = ApolloContext> = {
-  Date?: GraphQLScalarType;
-  FieldError?: FieldErrorResolvers<ContextType>;
   File?: FileResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Playground?: PlaygroundResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
+  Date?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserResponse?: UserResponseResolvers<ContextType>;
+  FieldError?: FieldErrorResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
 };
 
 

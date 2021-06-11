@@ -14,7 +14,7 @@ export const userResolvers: Resolvers = {
   },
 
   Mutation: {
-    register: async (_, { email, password }) => {
+    register: async (_, { email, password, name }) => {
       const existingUser = await User.findOne({ email });
 
       // ---------------------------------------------------
@@ -34,7 +34,11 @@ export const userResolvers: Resolvers = {
       }
 
       const hashedPassword = await bcrypt.hash(password, 12);
-      const user = await new User({ email, password: hashedPassword }).save();
+      const user = await new User({
+        email,
+        password: hashedPassword,
+        name,
+      }).save();
 
       return { user };
     },

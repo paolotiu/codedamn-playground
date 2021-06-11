@@ -36,7 +36,7 @@ const updateFileMutation = (variables: MutationUpdateFileArgs) =>
   mutate<{ updateFile: File }>(UPDATE_FILE_MUTATION, { variables });
 
 describe('File operations', () => {
-  const mockUser = { email: 'file@test.com', password: 'testPassword' };
+  const mockUser = { email: 'file@test.com', password: 'testPassword', name: 'file' };
   let userId: string;
 
   it('Login user', async () => {

@@ -4,6 +4,7 @@ import { InterfaceSchema } from './utilTypes';
 interface IUser {
   email: string;
   password: string;
+  name: string;
 }
 
 export interface IUserDoc extends IUser, Document {
@@ -18,6 +19,10 @@ const UserSchemaFields: InterfaceSchema<IUser> = {
     required: true,
   },
   password: {
+    type: String,
+    required: true,
+  },
+  name: {
     type: String,
     required: true,
   },

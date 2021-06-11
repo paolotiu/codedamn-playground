@@ -1,11 +1,12 @@
 import { gql } from 'apollo-server-express';
 
 export const REGISTER_MUTATION = gql`
-  mutation registerUser($email: String!, $password: String!) {
-    register(email: $email, password: $password) {
+  mutation registerUser($email: String!, $password: String!, $name: String!) {
+    register(email: $email, password: $password, name: $name) {
       user {
         email
         id
+        name
       }
     }
   }
@@ -17,6 +18,7 @@ export const LOGIN_MUTATION = gql`
       user {
         email
         id
+        name
       }
       errors {
         message

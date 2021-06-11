@@ -2,6 +2,7 @@ type User {
   email: String!
   files: [File!]!
   playgrounds: [Playground!]!
+  name: String!
   id: ID!
 }
 
@@ -20,6 +21,6 @@ type Query {
 }
 
 type Mutation {
-  register(email: String!, password: String!): UserResponse!
+  register(email: String!, password: String!, name: String!): UserResponse!
   login(email: String!, password: String!): UserResponse!
 }
