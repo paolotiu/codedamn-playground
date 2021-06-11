@@ -45,7 +45,7 @@ const PlaygroundHeader = ({ playgroundId, playgroundName }: Props) => {
       </div>
       <div>
         <a
-          href={`http://localhost:3000/playground/detached/${playgroundId}`}
+          href={`${window.location.origin}/playground/detached/${playgroundId}`}
           target="_blank"
           rel="noreferrer"
           className="flex items-center"

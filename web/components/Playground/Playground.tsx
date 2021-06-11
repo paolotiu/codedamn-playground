@@ -20,7 +20,6 @@ import { useBroadcastChannel } from '@utils/useBroadcastChannel';
 import { useIframe } from '@utils/useIframe';
 import PlaygroundHeader from './PlaygroundHeader';
 
-
 import 'xterm/css/xterm.css';
 import 'react-reflex/styles.css';
 
@@ -152,7 +151,7 @@ const Playground = ({ id: playgroundId }: Props) => {
                       title="Playground"
                       className="w-full h-full pane-content"
                       sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-modals allow-orientation-lock allow-pointer-lock"
-                      src={`http://localhost:4000/playground/${playgroundId}`}
+                      src={`${process.env.NEXT_PUBLIC_SERVER_URL}/playground/${playgroundId}`}
                     ></iframe>
                   </ReflexElement>
 

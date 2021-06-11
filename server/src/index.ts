@@ -12,6 +12,7 @@ import { isValidObjectId } from 'mongoose';
 const RedisStore = connectRedis(session);
 const redisClient = redis.createClient();
 
+const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
 const startApolloServer = async () => {
   const app = express();
   const httpServer = http.createServer(app);
@@ -81,7 +82,7 @@ const startApolloServer = async () => {
     app,
     cors: {
       credentials: true,
-      origin: ['http://localhost:3000', 'http://localhost:4000'],
+      origin: [WEB_URL],
     },
   });
 
