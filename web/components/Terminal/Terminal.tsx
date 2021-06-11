@@ -11,7 +11,7 @@ const TerminalComponent = () => {
   useEffect(() => {
     if (termRef.current) {
       term.open(termRef.current);
-      term.write('Hello :)');
+      term.write('Hello, try the "echo" command :)');
       termPrompt();
       fitAddon.fit();
     }
