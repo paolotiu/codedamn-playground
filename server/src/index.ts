@@ -82,7 +82,7 @@ const startApolloServer = async () => {
     app,
     cors: {
       credentials: true,
-      origin: [WEB_URL],
+      origin: [WEB_URL, 'https://codedamn-playground.vercel.app'],
     },
   });
 
