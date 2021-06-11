@@ -74,6 +74,7 @@ export type MutationDeletePlaygroundArgs = {
 export type MutationRegisterArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+  name: Scalars['String'];
 };
 
 
@@ -135,6 +136,7 @@ export type User = {
   email: Scalars['String'];
   files: Array<File>;
   playgrounds: Array<Playground>;
+  name: Scalars['String'];
   id: Scalars['ID'];
 };
 
@@ -267,6 +269,17 @@ export type LoginMutation = (
       & Pick<FieldError, 'message'>
     )>>> }
   ) }
+);
+
+export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'name' | 'email'>
+  )> }
 );
 
 
@@ -455,5 +468,27 @@ export const useLoginMutation = <
     ) => 
     useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
       (variables?: LoginMutationVariables) => fetcher<LoginMutation, LoginMutationVariables>(client, LoginDocument, variables)(),
+      options
+    );
+export const GetUserDocument = `
+    query getUser {
+  me {
+    id
+    name
+    email
+  }
+}
+    `;
+export const useGetUserQuery = <
+      TData = GetUserQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient, 
+      variables?: GetUserQueryVariables, 
+      options?: UseQueryOptions<GetUserQuery, TError, TData>
+    ) => 
+    useQuery<GetUserQuery, TError, TData>(
+      ['getUser', variables],
+      fetcher<GetUserQuery, GetUserQueryVariables>(client, GetUserDocument, variables),
       options
     );
