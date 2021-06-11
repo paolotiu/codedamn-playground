@@ -32,7 +32,7 @@ const Dashboard = () => {
     const { createPlayground } = await createPlaygroundMutation.mutateAsync({
       name: 'HTML Playground',
     });
-    router.push('http://localhost:3000/playground/' + createPlayground.id);
+    router.push(`${window.location.origin}/playground/` + createPlayground.id);
   };
 
   if (!user) return null;
