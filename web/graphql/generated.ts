@@ -272,6 +272,24 @@ export type LoginMutation = (
   ) }
 );
 
+export type RegisterMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type RegisterMutation = (
+  { __typename?: 'Mutation' }
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<Maybe<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message'>
+    )>>> }
+  ) }
+);
+
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -477,6 +495,26 @@ export const useLoginMutation = <
     ) => 
     useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
       (variables?: LoginMutationVariables) => fetcher<LoginMutation, LoginMutationVariables>(client, LoginDocument, variables)(),
+      options
+    );
+export const RegisterDocument = `
+    mutation register($email: String!, $password: String!, $name: String!) {
+  register(email: $email, password: $password, name: $name) {
+    errors {
+      message
+    }
+  }
+}
+    `;
+export const useRegisterMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient, 
+      options?: UseMutationOptions<RegisterMutation, TError, RegisterMutationVariables, TContext>
+    ) => 
+    useMutation<RegisterMutation, TError, RegisterMutationVariables, TContext>(
+      (variables?: RegisterMutationVariables) => fetcher<RegisterMutation, RegisterMutationVariables>(client, RegisterDocument, variables)(),
       options
     );
 export const GetUserDocument = `

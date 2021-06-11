@@ -14,6 +14,16 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+export const REGISTER_MUTATION = gql`
+mutation register($email: String!, $password: String!, $name: String!){
+    register(email: $email, password: $password, name:$name){
+        errors{
+            message
+        }
+    }
+}
+`
+
 export const GET_USER_QUERY = gql`
   query getUser {
     me {
