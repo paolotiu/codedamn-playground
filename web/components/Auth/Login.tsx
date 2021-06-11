@@ -21,10 +21,10 @@ const Auth = () => {
   const router = useRouter();
 
   const onSubmit = async (data: FormValues) => {
-    loginMutation.mutate(data);
-    if (loginMutation.data?.login.errors) {
+    const { login } = await loginMutation.mutateAsync(data);
+    if (login.errors) {
       // Set the error given from server
-      setError('email', { message: loginMutation.data.login.errors[0]?.message, type: 'manual' });
+      setError('email', { message: login.errors[0]?.message, type: 'manual' });
       return;
     }
 

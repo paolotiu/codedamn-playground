@@ -33,7 +33,7 @@ const Popup = ({ closePopup }: PopupProps) => {
         }}
         onClick={() => {
           logOutMutation.mutate({});
-          roter.push('/');
+          roter.push('/login');
         }}
       >
         Logout

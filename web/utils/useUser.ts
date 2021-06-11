@@ -18,7 +18,9 @@ const defaultOptions: UseUserDefaultOpts = {
 export const useUser = (props = defaultOptions) => {
   const { redirect } = props;
   const [user, setUser] = useState<Omit<User, 'files' | 'playgrounds'>>();
-  const userQuery = useGetUserQuery(graphqlClient);
+
+  // Cache time to zero to prevent false negatives/positives
+  const userQuery = useGetUserQuery(graphqlClient, {}, { cacheTime: 0 });
   const router = useRouter();
 
   useEffect(() => {
